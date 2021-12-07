@@ -13,9 +13,9 @@ namespace COO {
 			int nbJoueur = 1;
 			for (joueur *f : joueurs) {
 				std::cout << "Le joueur "<<nbJoueur<<" a " << f->getScore() << " points" << std::endl;
-				if (!f->isIA()) {
-					f->jouer();
-				}
+				f->jouer();
+				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl<<std::endl<<std::endl;
+
 				nbJoueur++;
 			}
 		}
@@ -23,7 +23,7 @@ namespace COO {
 		int nbJoueur = 1;
 
 		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points ";
+			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
 			nbJoueur++;
 		}
 	}

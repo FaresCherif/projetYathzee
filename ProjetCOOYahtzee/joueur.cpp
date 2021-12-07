@@ -12,13 +12,15 @@
 #include "visibiliteFigure.h"
 #include <iostream>
 #include <string>   
+#include <random>
 
 
 namespace COO {
-	joueur::joueur(bool ia)
+	joueur::joueur(typeJoueur ia)
 	{
+
 		this->point = 0; // instancie le nombre de points a 0
-		this->ia = ia;
+		this->type = ia;
 		//ajout de toutes les possibilites dans figure actuel
 		std::vector<figure*> un;
 		un.push_back(new nombre<1>);
@@ -226,6 +228,49 @@ namespace COO {
 
 	}
 
+	void joueur::afficherChoixIa(int i) {
+		if (i== 0) {
+			std::cout << "L'IA a choisis les 1 ";
+		}
+		if (i == 1) {
+			std::cout << "L'IA a choisis les 2 ";
+		}
+		if (i == 2) {
+			std::cout << "L'IA a choisis les 3 ";
+		}
+		if (i == 3) {
+			std::cout << "L'IA a choisis les 4 ";
+		}
+		if (i == 4) {
+			std::cout << "L'IA a choisis les 5";
+		}
+		if (i == 5) {
+			std::cout << "L'IA a choisis les 6";
+		}
+		if (i == 6) {
+			std::cout << "L'IA a choisis le brelan ";
+		}
+		if (i == 7) {
+			std::cout << "L'IA a choisis le full ";
+		}
+		if (i == 8) {
+			std::cout << "L'IA a choisis le carree ";
+		}
+		if (i == 9) {
+			std::cout << "L'IA a choisis la petiteSuite ";
+		}
+		if (i == 10) {
+			std::cout << "L'IA a choisis la grandeSuite ";
+		}
+		if (i == 11) {
+			std::cout << "L'IA a choisis le yahtzee ";
+		}
+		if (i == 12) {
+			std::cout << "L'IA a choisis la chance";
+		}
+		std::cout << std::endl;
+	}
+
 	void joueur::afficherChoixFigure() {
 		std::cout << "Que voulez-vous prende ?" << std::endl << "Superieur : ";
 		if (this->figureActuel[0]->vu == false) {
@@ -274,11 +319,44 @@ namespace COO {
 	}
 
 	bool joueur::isIA() {
-		return this->ia;
+		return !(this->type==typeJoueur::humain);
 	}
 
-	void joueur::iaRandom() {
+	int  joueur::iaRandom() {
+		int choix;
+		bool choixValide = false;
 
+		while (!choixValide) {
+			int nbAleatoire;
+
+			std::random_device dev;
+			std::mt19937 rng(dev());
+			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 12); // distribution in range [1, 6]
+			nbAleatoire = dist6(rng);
+
+			if (this->figureActuel[nbAleatoire]->vu == false) {
+				choix = nbAleatoire;
+				choixValide = true;
+				std::cout << "num aleatoire : " << choix << std::endl;
+			}
+		}
+		return choix;
+	}
+
+	int joueur::iaMax(){
+		int choix=0;
+		int valeurMax = -1;	// valeur negatif pour prendre la prendre la valeur max disponible avec lese figures actuels
+
+		for (int i = 0; i < 13; i++) {
+			if (this->figureActuel[i]->vu == false) {
+				if (this->figureActuel[i]->valeur > valeurMax) {
+					valeurMax = this->figureActuel[i]->valeur;
+					choix = i;
+				}
+			}
+		}
+
+		return choix;
 	}
 
 	void joueur::choisirDeJoueur() {
@@ -302,7 +380,7 @@ namespace COO {
 
 			if (!lancerJoueur.isTousGarder()) {
 				std::cout << "garder les des ";
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < this->nbDe; i++) {
 					if (!lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
@@ -312,7 +390,7 @@ namespace COO {
 
 			if (!lancerJoueur.isAucunGarder()) {
 				std::cout << "ne plus garder les des ";
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < this->nbDe; i++) {
 					if (lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
@@ -348,36 +426,66 @@ namespace COO {
 	}
 
 	void joueur::jouer() {
-		this->choisirDeJoueur();
-		this->choisirFigure();
+
+		int choix;
+
+		switch (this->type) {
+		case typeJoueur::humain:
+			this->choisirDeJoueur();
+			choix = entrerNumFigure();
+			break;
+		case typeJoueur::iaRandom:
+			lancerDe();
+			choix = iaRandom();
+			break;
+		case typeJoueur::iaMax:
+			lancerDe();
+			choix = iaMax();
+			break;
+		}
+
+		this->choisirFigure(choix);
 	}
 
-	void joueur::choisirFigure() {
-		bool choixValide = false;
-		while (!choixValide) {
 
+	int joueur::entrerNumFigure() {
+		
+		bool numeroValide = false;
+		int numChoixFigue;
+
+		while (!numeroValide) {
 			afficherChoixFigure();
 
 			std::string choixFigure;
-			int numChoixFigue;
 			std::cin >> choixFigure;
 
 
 			try {
 				numChoixFigue = (stoi(choixFigure) - 1);
+				numeroValide = true;
+			}
+			catch (...) {
+				std::cout << "ERREUR Charactere non reconnu" << std::endl;
+			}
+		}
 
+		return numChoixFigue;
+	}
 
-				if (numChoixFigue >= 0 && numChoixFigue <= 13) {
+	void joueur::choisirFigure(int numChoixFigue) {
+		bool choixValide = false;
+
+		while (!choixValide) {
+				if (numChoixFigue >= 0 && numChoixFigue <= 12) {
 					choixValide = this->validerFigure(numChoixFigue);
 				}
 				else {
 					std::cout << "ERREUR numero non reconnu" << std::endl;
 				}
 
-			}
-			catch (...) {
-				std::cout << "ERREUR Charactere non reconnu" << std::endl;
-			}
+				if (!choixValide) {
+					numChoixFigue = entrerNumFigure();
+				}
 		}
 	}
 
@@ -393,6 +501,8 @@ namespace COO {
 					std::cout << "---------------------------------------------------------PRIME----------------------------------------" << std::endl;
 				}
 			}
+
+			this->afficherChoixIa(i);
 
 			return true;
 		}
