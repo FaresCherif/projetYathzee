@@ -154,7 +154,7 @@ namespace COO {
 
 	void joueur::lancerDe()
 	{
-		de* d=this->lancer.lancerDe();
+		de* d=this->lancerJoueur.lancerDe();
 		int i = 0;
 		for (visibiliteFigure *vf : this->figureActuel) // Convertie en solution 3 à la compilation ?
 		{
@@ -292,7 +292,7 @@ namespace COO {
 		bool relancerDe = true;
 		int compteurLance = 1;
 		const int nbRelance = 3;
-		this->lancer.aucunGarder();
+		this->lancerJoueur.aucunGarder();
 
 		lancerDe();
 		afficherValeur();
@@ -300,20 +300,20 @@ namespace COO {
 		while (compteurLance < 3 && relancerDe) {
 			std::cout << "relancer (O/N) " << compteurLance << "/" << nbRelance << std::endl;
 
-			if (!lancer.isTousGarder()) {
+			if (!lancerJoueur.isTousGarder()) {
 				std::cout << "garder les des ";
 				for (int i = 0; i < 5; i++) {
-					if (!lancer.isGarder(i)) {
+					if (!lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
 				}
 				std::cout << "en appuyant sur le nombre correspondant " << std::endl;
 			}
 
-			if (!lancer.isAucunGarder()) {
+			if (!lancerJoueur.isAucunGarder()) {
 				std::cout << "ne plus garder les des ";
 				for (int i = 0; i < 5; i++) {
-					if (lancer.isGarder(i)) {
+					if (lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
 				}
@@ -327,11 +327,11 @@ namespace COO {
 				relancerDe = false;
 			}
 			else if (reponse == "1" || reponse == "2" || reponse == "3" || reponse == "4" || reponse == "5") {
-				if (!this->lancer.isGarder(stoi(reponse) - 1)) {
-					this->lancer.garder(stoi(reponse) - 1);
+				if (!this->lancerJoueur.isGarder(stoi(reponse) - 1)) {
+					this->lancerJoueur.garder(stoi(reponse) - 1);
 				}
 				else {
-					this->lancer.lacher(stoi(reponse) - 1);
+					this->lancerJoueur.lacher(stoi(reponse) - 1);
 				}
 			}
 			else if (reponse == "O") {
