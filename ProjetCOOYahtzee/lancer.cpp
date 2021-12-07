@@ -3,6 +3,7 @@
 namespace COO {
 	lancer::lancer()
 	{
+
 		for (int i = 0; i < this->nbDe; i++) {
 			this->desActuels[i] = de(1);
 		}

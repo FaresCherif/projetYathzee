@@ -10,11 +10,11 @@ namespace COO {
 	public:
 		lancer();
 		void garder(int);
-		void lacher(int i);
+		void lacher(int);
 		bool isTousGarder();
 		bool isAucunGarder();
 		void aucunGarder();
 		de* lancerDe();
-		bool isGarder(int i);
+		bool isGarder(int);
 	};
 }

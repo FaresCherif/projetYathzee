@@ -17,6 +17,7 @@
 namespace COO {
 	joueur::joueur(bool ia)
 	{
+
 		this->point = 0; // instancie le nombre de points a 0
 		this->ia = ia;
 		//ajout de toutes les possibilites dans figure actuel
@@ -278,7 +279,7 @@ namespace COO {
 	}
 
 	void joueur::iaRandom() {
-
+	
 	}
 
 	void joueur::choisirDeJoueur() {
@@ -302,7 +303,7 @@ namespace COO {
 
 			if (!lancerJoueur.isTousGarder()) {
 				std::cout << "garder les des ";
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < this->nbDe; i++) {
 					if (!lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
@@ -312,7 +313,7 @@ namespace COO {
 
 			if (!lancerJoueur.isAucunGarder()) {
 				std::cout << "ne plus garder les des ";
-				for (int i = 0; i < 5; i++) {
+				for (int i = 0; i < this->nbDe; i++) {
 					if (lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}

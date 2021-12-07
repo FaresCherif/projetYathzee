@@ -10,6 +10,7 @@ namespace COO {
 	private:
 		int point;
 		int pointPrime = 63;
+		const static int nbDe = 5;
 		lancer lancerJoueur;
 		bool ia;
 		std::vector<visibiliteFigure*> figureActuel;
