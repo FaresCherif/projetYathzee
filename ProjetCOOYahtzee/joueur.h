@@ -5,6 +5,7 @@
 #include "visibiliteFigure.h"
 
 namespace COO {
+	enum class typeJoueur { humain, iaRandom };
 
 	class joueur {
 	private:
@@ -12,19 +13,21 @@ namespace COO {
 		int pointPrime = 63;
 		const static int nbDe = 5;
 		lancer lancerJoueur;
-		bool ia;
+		typeJoueur type;
 		std::vector<visibiliteFigure*> figureActuel;
 	public :
-		joueur(bool);
+		joueur(typeJoueur);
 		int getScore();
 		void lancerDe();
 		void afficherValeur();
 		void afficherChoixFigure();
 		bool isIA();
-		void iaRandom();
+		int iaRandom();
 		void choisirDeJoueur();
 		void jouer();
-		void choisirFigure();
+		void choisirFigure(int);
 		bool validerFigure(int);
+		int entrerNumFigure();
+
 	};
 }

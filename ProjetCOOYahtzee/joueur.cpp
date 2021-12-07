@@ -12,14 +12,15 @@
 #include "visibiliteFigure.h"
 #include <iostream>
 #include <string>   
+#include <random>
 
 
 namespace COO {
-	joueur::joueur(bool ia)
+	joueur::joueur(typeJoueur ia)
 	{
 
 		this->point = 0; // instancie le nombre de points a 0
-		this->ia = ia;
+		this->type = ia;
 		//ajout de toutes les possibilites dans figure actuel
 		std::vector<figure*> un;
 		un.push_back(new nombre<1>);
@@ -275,11 +276,28 @@ namespace COO {
 	}
 
 	bool joueur::isIA() {
-		return this->ia;
+		return !(this->type==typeJoueur::humain);
 	}
 
-	void joueur::iaRandom() {
-	
+	int  joueur::iaRandom() {
+		int choix;
+		bool choixValide = false;
+
+		while (!choixValide) {
+			int nbAleatoire;
+
+			std::random_device dev;
+			std::mt19937 rng(dev());
+			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 12); // distribution in range [1, 6]
+			nbAleatoire = dist6(rng);
+
+			if (this->figureActuel[nbAleatoire]->vu == false) {
+				choix = nbAleatoire;
+				choixValide = true;
+				std::cout << "num aleatoire : " << choix << std::endl;
+			}
+		}
+		return choix;
 	}
 
 	void joueur::choisirDeJoueur() {
@@ -349,36 +367,63 @@ namespace COO {
 	}
 
 	void joueur::jouer() {
-		this->choisirDeJoueur();
-		this->choisirFigure();
+
+		int choix;
+
+		switch (this->type) {
+		case typeJoueur::humain:
+			this->choisirDeJoueur();
+			choix = entrerNumFigure();
+			break;
+		case typeJoueur::iaRandom:
+			lancerDe();
+			choix = iaRandom();
+			break;
+		}
+
+
+		this->choisirFigure(choix);
 	}
 
-	void joueur::choisirFigure() {
-		bool choixValide = false;
-		while (!choixValide) {
 
+	int joueur::entrerNumFigure() {
+		
+		bool numeroValide = false;
+		int numChoixFigue;
+
+		while (!numeroValide) {
 			afficherChoixFigure();
 
 			std::string choixFigure;
-			int numChoixFigue;
 			std::cin >> choixFigure;
 
 
 			try {
 				numChoixFigue = (stoi(choixFigure) - 1);
+				numeroValide = true;
+			}
+			catch (...) {
+				std::cout << "ERREUR Charactere non reconnu" << std::endl;
+			}
+		}
 
+		return numChoixFigue;
+	}
 
-				if (numChoixFigue >= 0 && numChoixFigue <= 13) {
+	void joueur::choisirFigure(int numChoixFigue) {
+		bool choixValide = false;
+
+		while (!choixValide) {
+				if (numChoixFigue >= 0 && numChoixFigue <= 12) {
 					choixValide = this->validerFigure(numChoixFigue);
 				}
 				else {
 					std::cout << "ERREUR numero non reconnu" << std::endl;
 				}
 
-			}
-			catch (...) {
-				std::cout << "ERREUR Charactere non reconnu" << std::endl;
-			}
+				if (!choixValide) {
+					numChoixFigue = entrerNumFigure();
+				}
 		}
 	}
 
