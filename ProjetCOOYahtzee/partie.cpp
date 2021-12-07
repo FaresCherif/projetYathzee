@@ -23,7 +23,7 @@ namespace COO {
 		int nbJoueur = 1;
 
 		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points ";
+			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
 			nbJoueur++;
 		}
 	}

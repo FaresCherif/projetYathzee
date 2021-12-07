@@ -228,6 +228,49 @@ namespace COO {
 
 	}
 
+	void joueur::afficherChoixIa(int i) {
+		if (i== 0) {
+			std::cout << "L'IA a choisis les 1 ";
+		}
+		if (i == 1) {
+			std::cout << "L'IA a choisis les 2 ";
+		}
+		if (i == 2) {
+			std::cout << "L'IA a choisis les 3 ";
+		}
+		if (i == 3) {
+			std::cout << "L'IA a choisis les 4 ";
+		}
+		if (i == 4) {
+			std::cout << "L'IA a choisis les 5";
+		}
+		if (i == 5) {
+			std::cout << "L'IA a choisis les 6";
+		}
+		if (i == 6) {
+			std::cout << "L'IA a choisis le brelan ";
+		}
+		if (i == 7) {
+			std::cout << "L'IA a choisis le full ";
+		}
+		if (i == 8) {
+			std::cout << "L'IA a choisis le carree ";
+		}
+		if (i == 9) {
+			std::cout << "L'IA a choisis la petiteSuite ";
+		}
+		if (i == 10) {
+			std::cout << "L'IA a choisis la grandeSuite ";
+		}
+		if (i == 11) {
+			std::cout << "L'IA a choisis le yahtzee ";
+		}
+		if (i == 12) {
+			std::cout << "L'IA a choisis la chance";
+		}
+		std::cout << std::endl;
+	}
+
 	void joueur::afficherChoixFigure() {
 		std::cout << "Que voulez-vous prende ?" << std::endl << "Superieur : ";
 		if (this->figureActuel[0]->vu == false) {
@@ -297,6 +340,22 @@ namespace COO {
 				std::cout << "num aleatoire : " << choix << std::endl;
 			}
 		}
+		return choix;
+	}
+
+	int joueur::iaMax(){
+		int choix=0;
+		int valeurMax = -1;	// valeur negatif pour prendre la prendre la valeur max disponible avec lese figures actuels
+
+		for (int i = 0; i < 13; i++) {
+			if (this->figureActuel[i]->vu == false) {
+				if (this->figureActuel[i]->valeur > valeurMax) {
+					valeurMax = this->figureActuel[i]->valeur;
+					choix = i;
+				}
+			}
+		}
+
 		return choix;
 	}
 
@@ -379,8 +438,11 @@ namespace COO {
 			lancerDe();
 			choix = iaRandom();
 			break;
+		case typeJoueur::iaMax:
+			lancerDe();
+			choix = iaMax();
+			break;
 		}
-
 
 		this->choisirFigure(choix);
 	}
@@ -439,6 +501,8 @@ namespace COO {
 					std::cout << "---------------------------------------------------------PRIME----------------------------------------" << std::endl;
 				}
 			}
+
+			this->afficherChoixIa(i);
 
 			return true;
 		}

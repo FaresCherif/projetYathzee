@@ -5,7 +5,7 @@
 #include "visibiliteFigure.h"
 
 namespace COO {
-	enum class typeJoueur { humain, iaRandom };
+	enum class typeJoueur { humain, iaRandom, iaMax};
 
 	class joueur {
 	private:
@@ -20,9 +20,11 @@ namespace COO {
 		int getScore();
 		void lancerDe();
 		void afficherValeur();
+		void afficherChoixIa(int i);
 		void afficherChoixFigure();
 		bool isIA();
 		int iaRandom();
+		int iaMax();
 		void choisirDeJoueur();
 		void jouer();
 		void choisirFigure(int);

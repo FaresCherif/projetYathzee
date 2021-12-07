@@ -16,7 +16,7 @@
 using namespace COO;
 int main() {
 	joueur j1(typeJoueur::humain);
-	joueur j2(typeJoueur::iaRandom);
+	joueur j2(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;
 	vecJoueurs.push_back(&j1);
