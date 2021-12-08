@@ -6,10 +6,13 @@ namespace COO {
 	partie::partie(std::vector<joueur*> vecJoueur)
 	{
 		this->joueurs = vecJoueur;
+		for (joueur* j : vecJoueur) {
+			j->setNbFigure(this->nbFigure);
+		}
 	}
 
 	void partie::jouer() {
-		for (int i = 0; i < this->nbFigure-1; i++) {
+		for (int i = 0; i < this->nbFigure; i++) {
 			int nbJoueur = 1;
 			for (joueur *f : joueurs) {
 				std::cout << "Le joueur "<<nbJoueur<<" a " << f->getScore() << " points" << std::endl;

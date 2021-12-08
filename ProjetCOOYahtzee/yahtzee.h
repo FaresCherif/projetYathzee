@@ -2,27 +2,21 @@
 #include "figure.h"
 
 namespace COO {
-	template <int T>
 
 	class yahtzee : public figure {
 	public:
 		int valFigure(de* des) {
 			bool yahtz = true;
+			int faceYahtzee = des[0].getValeur();
 
 			for (int i = 0; i < 5; i++) {
-				if (des[i].getValeur() != T) {
-					yahtz=false;
+				if (des[i].getValeur() != faceYahtzee) {
+					return 0;
 				}
 			}
 
-			if (yahtz) {
-				//std::cout << "yahtzee de " << T <<" rapporte 50 points"<< std::endl;
-				return 50;
-			}
-			else {
-				//std::cout << "yahtzee de " << T <<" rapporte 0 points"<< std::endl;
-				return 0;
-			}
+			return 50;
+
 		}
 
 	};

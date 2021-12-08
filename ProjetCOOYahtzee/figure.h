@@ -7,6 +7,5 @@ namespace COO {
 		int valeur;
 	public:
 		virtual int valFigure(de*)=0;
-		virtual ~figure()=0;
 	};
 };
