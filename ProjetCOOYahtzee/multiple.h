@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+//#include <algorithm>
 #include "figure.h"
 #include <algorithm>
 
