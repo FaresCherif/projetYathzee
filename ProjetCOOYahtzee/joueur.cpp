@@ -85,42 +85,8 @@ namespace COO {
 		return !(this->typeJ->getType()==typeJoueur::humain);
 	}
 
-	int  joueur::iaRandom() {
-		int choix;
-		bool choixValide = false;
 
-		while (!choixValide) {
-			int nbAleatoire;
 
-			std::random_device dev;
-			std::mt19937 rng(dev());
-			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 12); // distribution in range [1, 6]
-			nbAleatoire = dist6(rng);
-
-			if (this->figureActuel[nbAleatoire]->vu == false) {
-				choix = nbAleatoire;
-				choixValide = true;
-				std::cout << "num aleatoire : " << choix << std::endl;
-			}
-		}
-		return choix;
-	}
-
-	int joueur::iaMax(){
-		int choix=0;
-		int valeurMax = -1;	// valeur negatif pour prendre la prendre la valeur max disponible avec lese figures actuels
-
-		for (int i = 0; i < nbFigure; i++) {
-			if (this->figureActuel[i]->vu == false) {
-				if (this->figureActuel[i]->valeur > valeurMax) {
-					valeurMax = this->figureActuel[i]->valeur;
-					choix = i;
-				}
-			}
-		}
-
-		return choix;
-	}
 
 	void joueur::choisirDeJoueur() {
 		if (this->pointPrime > 0) {
@@ -199,11 +165,11 @@ namespace COO {
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
-			choix = cdr.choixDe(this->figureActuel,lancerJoueur.getDes());
+			choix = this->typeJ->choixDe(this->figureActuel,lancerJoueur.getDes());
 			break;
 		case typeJoueur::iaMax:
 			lancerDe();
-			choix = iaMax();
+			choix = this->typeJ->choixDe(this->figureActuel,lancerJoueur.getDes());
 			break;
 		}
 
