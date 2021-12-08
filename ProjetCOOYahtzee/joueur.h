@@ -3,9 +3,9 @@
 #include "figure.h"
 #include <vector>
 #include "visibiliteFigure.h"
+#include "strategyDe.h"
 
 namespace COO {
-	enum class typeJoueur { humain, iaRandom, iaMax};
 
 	class joueur {
 	private:
@@ -15,8 +15,8 @@ namespace COO {
 		const static int nbRelance = 3;
 		int nbFigure;
 		lancer lancerJoueur;
-		typeJoueur type;
 		std::vector<visibiliteFigure*> figureActuel;
+		strategyDe *typeJ;
 	public :
 		joueur(typeJoueur);
 		int getScore();
@@ -32,7 +32,7 @@ namespace COO {
 		void choisirFigure(int);
 		bool validerFigure(int);
 		int entrerNumFigure();
-		void setNbFigure(int);
+		void setPartieJoueur(int, std::vector<visibiliteFigure*>);
 
 	};
 }

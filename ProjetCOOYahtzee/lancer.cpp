@@ -47,12 +47,17 @@ namespace COO {
 	de* lancer::lancerDe()
 	{
 		for (int i = 0; i < this->nbDe; i++) {
-			//this->desActuels[i].lancerDe();
+			this->desActuels[i].lancerDe();
 			this->desActuels[i].afficherValeur();
 		}
 		return this->desActuels;
 	}
 	bool lancer::isGarder(int i) {
 		return this->desActuels[i].isGarder();
+	}
+
+	de* lancer::getDes()
+	{
+		return this->desActuels;
 	}
 }

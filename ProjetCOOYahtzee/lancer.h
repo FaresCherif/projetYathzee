@@ -16,5 +16,6 @@ namespace COO {
 		void aucunGarder();
 		de* lancerDe();
 		bool isGarder(int);
+		de* getDes();
 	};
 }

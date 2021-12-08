@@ -11,40 +11,32 @@
 #include <random>
 #include "multiple.h"
 #include "suite.h"
+#include "choixDeRandom.h"
+#include "choixDeMax.h"
+#include "choixDeHumain.h"
 
 namespace COO {
 	joueur::joueur(typeJoueur ia)
 	{
-
 		this->point = 0; // instancie le nombre de points a 0
-		this->type = ia;
+
+		switch (ia)
+		{
+		case typeJoueur::humain:
+			this->typeJ = new choixDeHumain;
+			break;
+		case typeJoueur::iaRandom:
+			this->typeJ = new choixDeRandom;
+			break;
+		case typeJoueur::iaMax:
+			this->typeJ = new choixDeMax;
+			break;
+		default:
+			break;
+		}
+
+		
 		//ajout de toutes les possibilites dans figure actuel
-		figureActuel.push_back(new visibiliteFigure(new nombre<1>,"un"));
-
-		figureActuel.push_back(new visibiliteFigure(new nombre<2>,"deux"));
-
-		figureActuel.push_back(new visibiliteFigure(new nombre<3>,"trois"));
-
-		figureActuel.push_back(new visibiliteFigure(new nombre<4>,"quatre"));
-
-		figureActuel.push_back(new visibiliteFigure(new nombre<5>,"cinq"));
-
-		figureActuel.push_back(new visibiliteFigure(new nombre<6>,"six"));
-
-		figureActuel.push_back(new visibiliteFigure(new multiple<3>,"brelan"));
-
-		figureActuel.push_back(new visibiliteFigure(new full,"full"));
-
-		figureActuel.push_back(new visibiliteFigure(new multiple<4>,"carree"));
-
-		figureActuel.push_back(new visibiliteFigure(new suite<4>,"petiteSuite"));
-
-		figureActuel.push_back(new visibiliteFigure(new suite<5>,"grandeSuite"));
-
-		figureActuel.push_back(new visibiliteFigure(new multiple<5>,"yahtzee"));
-
-		this->figureActuel.push_back(new visibiliteFigure(new chance,"chance"));
-
 	}
 
 	int joueur::getScore() {
@@ -74,7 +66,7 @@ namespace COO {
 	}
 
 	void joueur::afficherChoixIa(int i) {
-		std::cout << "L'IA a choisis "<< this->figureActuel[i]<<std::endl;
+		std::cout << "L'IA a choisis "<< this->figureActuel[i]->nomFigure<<std::endl;
 		std::cout << std::endl;
 	}
 
@@ -90,7 +82,7 @@ namespace COO {
 	}
 
 	bool joueur::isIA() {
-		return !(this->type==typeJoueur::humain);
+		return !(this->typeJ->getType()==typeJoueur::humain);
 	}
 
 	int  joueur::iaRandom() {
@@ -198,15 +190,16 @@ namespace COO {
 	void joueur::jouer() {
 
 		int choix=0;
+		choixDeRandom cdr;
 
-		switch (this->type) {
+		switch (this->typeJ->getType()) {
 		case typeJoueur::humain:
 			this->choisirDeJoueur();
 			choix = entrerNumFigure();
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
-			choix = iaRandom();
+			choix = cdr.choixDe(this->figureActuel,lancerJoueur.getDes());
 			break;
 		case typeJoueur::iaMax:
 			lancerDe();
@@ -242,9 +235,10 @@ namespace COO {
 		return numChoixFigue;
 	}
 
-	void joueur::setNbFigure(int nbFig)
+	void joueur::setPartieJoueur(int nbFig, std::vector<visibiliteFigure*> visibFig)
 	{
 		this->nbFigure=nbFig;
+		this->figureActuel = visibFig;
 	}
 
 	void joueur::choisirFigure(int numChoixFigue) {
@@ -276,7 +270,7 @@ namespace COO {
 					std::cout << "---------------------------------------------------------PRIME----------------------------------------" << std::endl;
 				}
 			}
-			if (this->type != typeJoueur::humain) {
+			if (this->typeJ->getType() != typeJoueur::humain) {
 				this->afficherChoixIa(i);
 			}
 
