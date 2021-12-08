@@ -47,7 +47,7 @@ namespace COO {
 	de* lancer::lancerDe()
 	{
 		for (int i = 0; i < this->nbDe; i++) {
-			this->desActuels[i].lancerDe();
+			//this->desActuels[i].lancerDe();
 			this->desActuels[i].afficherValeur();
 		}
 		return this->desActuels;

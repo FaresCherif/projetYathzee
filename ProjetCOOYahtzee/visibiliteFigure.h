@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include "figure.h"
+#include <iostream>
+#include <string>
 
 namespace COO {
 	class joueur;
@@ -9,9 +11,10 @@ namespace COO {
 	private:
 		bool vu;
 		int valeur;
-		std::vector<figure*> vecFigure;
+		figure* figureC;
+		std::string nomFigure;
 	public:
-		visibiliteFigure(std::vector<figure*>);
+		visibiliteFigure(figure*,std::string);
 	};
 
 }

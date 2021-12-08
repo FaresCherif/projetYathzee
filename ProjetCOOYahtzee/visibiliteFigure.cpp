@@ -1,10 +1,11 @@
 #include "visibiliteFigure.h"
 
 namespace COO {
-	visibiliteFigure::visibiliteFigure(std::vector<figure*> vf)
+	visibiliteFigure::visibiliteFigure(figure* f,std::string nom)
 	{
-		this->vecFigure = vf;;
+		this->figureC = f;
 		this->valeur = 0;
 		this->vu = false;
+		this->nomFigure = nom;
 	}
 }

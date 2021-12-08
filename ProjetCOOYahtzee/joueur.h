@@ -12,6 +12,8 @@ namespace COO {
 		int point;
 		int pointPrime = 63;
 		const static int nbDe = 5;
+		const static int nbRelance = 3;
+		int nbFigure;
 		lancer lancerJoueur;
 		typeJoueur type;
 		std::vector<visibiliteFigure*> figureActuel;
@@ -30,6 +32,7 @@ namespace COO {
 		void choisirFigure(int);
 		bool validerFigure(int);
 		int entrerNumFigure();
+		void setNbFigure(int);
 
 	};
 }
