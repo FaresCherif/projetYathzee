@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "figure.h"
+#include <algorithm>
 
 
 namespace COO {

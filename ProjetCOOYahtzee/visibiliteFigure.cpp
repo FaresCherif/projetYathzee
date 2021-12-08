@@ -8,4 +8,12 @@ namespace COO {
 		this->vu = false;
 		this->nomFigure = nom;
 	}
+
+	bool visibiliteFigure::getFigureVu() {
+		return this->vu;
+	}
+
+	int visibiliteFigure::valeurFigure() {
+		return this->valeur;
+	}
 }

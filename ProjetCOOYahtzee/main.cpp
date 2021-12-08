@@ -11,12 +11,12 @@
 
 using namespace COO;
 int main() {
-	joueur j1(typeJoueur::humain);
-	joueur j2(typeJoueur::humain);
+	//joueur j1(typeJoueur::humain);
+	joueur j2(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;
-	vecJoueurs.push_back(&j1);
-	//vecJoueurs.push_back(&j2);
+	//vecJoueurs.push_back(&j1);
+	vecJoueurs.push_back(&j2);
 
 	partie p(vecJoueurs);
 	p.jouer();
