@@ -33,23 +33,74 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer() {
-		for (int i = 0; i < this->nbFigure; i++) {
-			int nbJoueur = 1;
-			for (joueur *f : joueurs) {
-				std::cout << "Le joueur "<<nbJoueur<<" a " << f->getScore() << " points" << std::endl;
-				f->jouer();
-				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl<<std::endl<<std::endl;
+	void partie::jouer(Diff difficulte) {
 
+		if (difficulte == Diff::facile)
+		{
+			for (int i = 0; i < this->nbFigure; i++) {
+				int nbJoueur = 1;
+				for (joueur* f : joueurs) {
+					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+					f->jouer_partie_facile();
+					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
+
+					nbJoueur++;
+				}
+			}
+			int nbJoueur = 1;
+
+			for (joueur* f : joueurs) {
+				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
 				nbJoueur++;
 			}
 		}
+		else if (difficulte == Diff::moyen)
+		{
+			for (int i = 0; i < this->nbFigure; i++) {
+				int nbJoueur = 1;
+				for (joueur* f : joueurs) {
+					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+					f->jouer_partie_moyen();
+					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
-		int nbJoueur = 1;
+					nbJoueur++;
+				}
+			}
+			int nbJoueur = 1;
 
-		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
-			nbJoueur++;
+			for (joueur* f : joueurs) {
+				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
+				nbJoueur++;
+			}
 		}
+		else if (difficulte == Diff::difficile)
+		{
+			for (int i = 0; i < this->nbFigure; i++) {
+				int nbJoueur = 1;
+				for (joueur* f : joueurs) {
+					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+					f->jouer_partie_difficile();
+					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
+
+					nbJoueur++;
+				}
+			}
+			int nbJoueur = 1;
+
+			for (joueur* f : joueurs) {
+				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
+				nbJoueur++;
+			}
+		}
+		else if (difficulte == Diff::hardcore)
+		{
+			//TODO ----------------- hardcoremode
+		}
+		else {
+
+			
+		}
+
+		
 	}
 }

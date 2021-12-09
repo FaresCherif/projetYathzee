@@ -1,7 +1,5 @@
 #include "joueur.h"
-
 #include "nombre.h"
-
 #include "full.h"
 #include "yahtzee.h"
 #include "chance.h"
@@ -16,6 +14,7 @@
 #include "choixDeHumain.h"
 
 namespace COO {
+
 	joueur::joueur(typeJoueur ia)
 	{
 		this->point = 0; // instancie le nombre de points a 0
@@ -108,7 +107,7 @@ namespace COO {
 
 	int joueur::iaMax(){
 		int choix=0;
-		int valeurMax = -1;	// valeur negatif pour prendre la prendre la valeur max disponible avec lese figures actuels
+		int valeurMax = -1;	// valeur negatif pour prendre la valeur max disponible avec lese figures actuels
 
 		for (int i = 0; i < nbFigure; i++) {
 			if (this->figureActuel[i]->vu == false) {
@@ -187,11 +186,78 @@ namespace COO {
 
 	}
 
-	void joueur::jouer() {
+	void joueur::choisirFigure_partie_facile(int numChoixFigur) {
+			bool choixValide = false;
 
+			while (!choixValide) {
+					if (numChoixFigur >= 0 && numChoixFigur < nbFigure) {
+						choixValide = this->validerFigure(numChoixFigur);
+					}
+					else {
+						std::cout << "ERREUR numero non reconnu" << std::endl;
+					}
+
+					if (!choixValide) {
+						numChoixFigur = entrerNumFigure();
+					}
+			}
+		}
+
+	void joueur::jouer_partie_facile() {
 		int choix=0;
 		choixDeRandom cdr;
+			switch (this->typeJ->getType()) {
+			case typeJoueur::humain:
+				this->choisirDeJoueur();
+				choix = entrerNumFigure();
+				break;
+			case typeJoueur::iaRandom:
+				lancerDe();
+				choix = cdr.choixDe(this->figureActuel, lancerJoueur.getDes());
+				break;
+			case typeJoueur::iaMax:
+				lancerDe();
+				choix = iaMax();
+				break;
+			}
+			this->choisirFigure_partie_facile(choix);
+	}
 
+	void joueur::choisirFigure_partie_moyen(int numChoixFigur) {
+		bool choixValide = false;
+		while (!choixValide) {
+			
+			if (numChoixFigur >= 0 && numChoixFigur < (int)nbFigure / 2) {
+				if (numChoixFigur < (int)nbFigure / 2)
+				{
+					choixValide = this->validerFigure(numChoixFigur);
+				}
+			}
+			else if(numChoixFigur >= (int)nbFigure/2 && numChoixFigur < nbFigure)
+			{
+				if (
+					this->figureActuel[1]->getFigureVu() == 1 &&
+					this->figureActuel[2]->getFigureVu() == 1 &&
+					this->figureActuel[3]->getFigureVu() == 1 &&
+					this->figureActuel[4]->getFigureVu() == 1 &&
+					( this->figureActuel[5]->getFigureVu() == 1 || this->figureActuel[6]->getFigureVu() == 1) ) {
+					choixValide = this->validerFigure(numChoixFigur);
+				}
+				else {
+					std::cout << "Le level est moyen, il faut commencer par la partie supperieur des figures" << std::endl;
+				}
+				 
+			}
+
+			if (!choixValide) {
+				numChoixFigur = entrerNumFigure();
+			}
+		}
+	}
+
+	void joueur::jouer_partie_moyen() {
+		int choix = 0;
+		choixDeRandom cdr;
 		switch (this->typeJ->getType()) {
 		case typeJoueur::humain:
 			this->choisirDeJoueur();
@@ -199,17 +265,69 @@ namespace COO {
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
-			choix = cdr.choixDe(this->figureActuel,lancerJoueur.getDes());
+			choix = cdr.choixDe(this->figureActuel, lancerJoueur.getDes());
 			break;
 		case typeJoueur::iaMax:
 			lancerDe();
 			choix = iaMax();
 			break;
 		}
-
-		this->choisirFigure(choix);
+		this->choisirFigure_partie_moyen(choix);
 	}
 
+	void joueur::choisirFigure_partie_difficile(int numChoixFigure)
+	{
+		bool choixValide = false;
+		
+		while (!choixValide) {
+			if ( numChoixFigure >= 0 && numChoixFigure < nbFigure )
+			{
+				if (numChoixFigure == 0)
+				{
+					choixValide = this->validerFigure(numChoixFigure);
+					tmp.push_back(&numChoixFigure);
+				}
+				else if (tmp.size() == numChoixFigure)
+				{
+					choixValide = this->validerFigure(numChoixFigure);
+					tmp.push_back(&numChoixFigure);
+				}
+				else
+				{
+					std::cout << "Le level est difficile, il faut choisir les figures de 1 a 13 successivement " << std::endl;
+				}
+			}
+			if (!choixValide) {
+				numChoixFigure = entrerNumFigure();
+			}
+		}
+	}
+
+	void joueur::jouer_partie_difficile() {
+		int choix = 0;
+		choixDeRandom cdr;
+		switch (this->typeJ->getType()) {
+		case typeJoueur::humain:
+			this->choisirDeJoueur();
+			choix = entrerNumFigure();
+			break;
+		case typeJoueur::iaRandom:
+			lancerDe();
+			choix = cdr.choixDe(this->figureActuel, lancerJoueur.getDes());
+			break;
+		case typeJoueur::iaMax:
+			lancerDe();
+			choix = iaMax();
+			break;
+		}
+		this->choisirFigure_partie_difficile(choix);
+	}
+
+	void joueur::setPartieJoueur(int nbFig, std::vector<visibiliteFigure*> visibFig)
+	{
+		this->nbFigure=nbFig;
+		this->figureActuel = visibFig;
+	}
 
 	int joueur::entrerNumFigure() {
 		
@@ -235,33 +353,11 @@ namespace COO {
 		return numChoixFigue;
 	}
 
-	void joueur::setPartieJoueur(int nbFig, std::vector<visibiliteFigure*> visibFig)
-	{
-		this->nbFigure=nbFig;
-		this->figureActuel = visibFig;
-	}
-
-	void joueur::choisirFigure(int numChoixFigue) {
-		bool choixValide = false;
-
-		while (!choixValide) {
-				if (numChoixFigue >= 0 && numChoixFigue < nbFigure) {
-					choixValide = this->validerFigure(numChoixFigue);
-				}
-				else {
-					std::cout << "ERREUR numero non reconnu" << std::endl;
-				}
-
-				if (!choixValide) {
-					numChoixFigue = entrerNumFigure();
-				}
-		}
-	}
-
 	bool joueur::validerFigure(int i) {
 		if (this->figureActuel[i]->vu == false) {
-			this->point += this->figureActuel[i]->valeur;
 			this->figureActuel[i]->vu = true;
+			this->point += this->figureActuel[i]->valeur;
+			
 
 			if (i >= 0 && i <= 5 && this->pointPrime>0) { //regarde si on est dans la partie superieure et si la pime a deja ete prise
 				this->pointPrime -= this->figureActuel[i]->valeur;
@@ -281,4 +377,5 @@ namespace COO {
 		}
 		return false;
 	}
+
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include "visibiliteFigure.h"
 #include "strategyDe.h"
+#include <list>
 
 namespace COO {
 
@@ -13,6 +14,7 @@ namespace COO {
 		int pointPrime = 63;
 		const static int nbDe = 5;
 		const static int nbRelance = 3;
+		std::list<int*> tmp;
 		int nbFigure;
 		lancer lancerJoueur;
 		std::vector<visibiliteFigure*> figureActuel;
@@ -28,8 +30,12 @@ namespace COO {
 		int iaRandom();
 		int iaMax();
 		void choisirDeJoueur();
-		void jouer();
-		void choisirFigure(int);
+		void jouer_partie_facile();
+		void jouer_partie_moyen();
+		void jouer_partie_difficile();
+		void choisirFigure_partie_facile(int);
+		void choisirFigure_partie_moyen(int);
+		void choisirFigure_partie_difficile(int);
 		bool validerFigure(int);
 		int entrerNumFigure();
 		void setPartieJoueur(int, std::vector<visibiliteFigure*>);
