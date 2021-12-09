@@ -33,9 +33,11 @@ namespace COO {
 		void jouer_partie_facile();
 		void jouer_partie_moyen();
 		void jouer_partie_difficile();
+		void jouer_partie_hardcore();
 		void choisirFigure_partie_facile(int);
 		void choisirFigure_partie_moyen(int);
 		void choisirFigure_partie_difficile(int);
+		void choisirFigure_partie_hardcore(int);
 		bool validerFigure(int);
 		int entrerNumFigure();
 		void setPartieJoueur(int, std::vector<visibiliteFigure*>);

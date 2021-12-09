@@ -99,7 +99,7 @@ namespace COO {
 			if (this->figureActuel[nbAleatoire]->vu == false) {
 				choix = nbAleatoire;
 				choixValide = true;
-				std::cout << "num aleatoire : " << choix << std::endl;
+				std::cout << "Choix aleatoire numero : " << choix+1 << std::endl;
 			}
 		}
 		return choix;
@@ -321,6 +321,41 @@ namespace COO {
 			break;
 		}
 		this->choisirFigure_partie_difficile(choix);
+	}
+
+	void joueur::choisirFigure_partie_hardcore(int numChoixFigure)
+	{
+		bool choixValide = false;
+
+		while (!choixValide) {
+			if (this->figureActuel[numChoixFigure]->vu == false) {
+				choixValide = this->validerFigure(numChoixFigure);
+				choixValide = true;
+			}
+			if (!choixValide) {
+				numChoixFigure = entrerNumFigure();
+			}
+		}
+	}
+
+	void joueur::jouer_partie_hardcore() {
+		int choix = 0;
+		choixDeRandom cdr;
+		switch (this->typeJ->getType()) {
+		case typeJoueur::humain:
+			this->choisirDeJoueur();
+			choix = iaRandom();
+			break;
+		case typeJoueur::iaRandom:
+			lancerDe();
+			choix = cdr.choixDe(this->figureActuel, lancerJoueur.getDes());
+			break;
+		case typeJoueur::iaMax:
+			lancerDe();
+			choix = iaMax();
+			break;
+		}
+		this->choisirFigure_partie_hardcore(choix);
 	}
 
 	void joueur::setPartieJoueur(int nbFig, std::vector<visibiliteFigure*> visibFig)
