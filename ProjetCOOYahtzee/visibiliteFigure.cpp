@@ -24,7 +24,18 @@ namespace COO {
 		this->vu = vF.vu;
 	}
 
-	visibiliteFigure::visibiliteFigure(bool v,int val,std::string nom ) {
+	visibiliteFigure::visibiliteFigure(bool v,int val,std::string nom,figure* fig ) {
+		this->vu = v;
+		this->valeur = val;
+		this->nomFigure = nom;
+		this->figureC = fig;
+	}
 
+	std::string visibiliteFigure::getNom() {
+		return this->nomFigure;
+	}
+
+	figure* visibiliteFigure::getFigure() {
+		return this->figureC;
 	}
 }

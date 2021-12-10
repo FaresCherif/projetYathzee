@@ -37,5 +37,7 @@ namespace COO {
 		strategyDe* getTypeJ();
 		int getNbDe();
 		int getNbRelance();
+		std::vector<visibiliteFigure*> getFigure();
+		joueur* charger(int,int,const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE);
 	};
 }

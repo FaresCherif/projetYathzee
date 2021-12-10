@@ -237,10 +237,10 @@ namespace COO {
 	}
 
 	int joueur::getNbFigure() {
-		return this->nbFigure[0];
+		return *(this->nbFigure);
 	}
 	int joueur::getNbDe() {
-		return this->nbDe[0];
+		return *(this->nbDe);
 	}
 	int joueur::getNbRelance() {
 		return *(this->nbRelance);
@@ -275,8 +275,6 @@ namespace COO {
 	{
 		std::ofstream myfile;
 		myfile.open(this->SAVEFILE, std::ios_base::app);
-		myfile << this->point<<std::endl;
-		myfile << this->pointPrime<<std::endl;
 
 		if (this->typeJ->getType() == typeJoueur::iaMax) {
 			myfile << 0 << std::endl;
@@ -287,14 +285,30 @@ namespace COO {
 		else if (this->typeJ->getType() == typeJoueur::humain) {
 			myfile << 2 << std::endl;
 		}
+		myfile << this->point << std::endl;
+		myfile << this->pointPrime << std::endl;
+
 		for (int i = 0; i < this->getNbFigure(); i++) {
 			myfile << this->figureActuel[i]->vu << " " << this->figureActuel[i]->valeur << " " << i << std::endl;
 		}
 		myfile << std::endl;
 		myfile.close();
 	}
+
+	joueur* joueur::charger(int pt, int ptPrime,const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE) {
+		this->point = pt;
+		this->pointPrime = ptPrime;
+		this->setPartieJoueur(nbD, nbReroll, nbFig, visibFig, SAVE);
+		return this;
+	}
+
+
 	strategyDe* joueur::getTypeJ()
 	{
 		return this->typeJ;
+	}
+
+	std::vector<visibiliteFigure*> joueur::getFigure() {
+		return this->figureActuel;
 	}
 }
