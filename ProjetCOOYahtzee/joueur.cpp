@@ -14,10 +14,12 @@
 #include "choixDeRandom.h"
 #include "choixDeMax.h"
 #include "choixDeHumain.h"
+#include <fstream>
 
 namespace COO {
 	joueur::joueur(typeJoueur ia)
 	{
+
 		this->point = 0; // instancie le nombre de points a 0
 
 		switch (ia)
@@ -46,18 +48,19 @@ namespace COO {
 	void joueur::lancerDe()
 	{
 		de* d=this->lancerJoueur.lancerDe();
-		for (visibiliteFigure *vf : this->figureActuel) // Convertie en solution 3 à la compilation ?
+		for (visibiliteFigure *vf : this->figureActuel) 
 		{
-			vf->valeur = 0;
-			int val = vf->figureC->valFigure(d);
-			vf->valeur = val;
-			
+			if (vf->vu == false) {
+				vf->valeur = 0;
+				int val = vf->figureC->valFigure(d);
+				vf->valeur = val;
+			}
 		}
 		std::cout << std::endl;
 	}
 
 	void joueur::afficherValeur() {
-		for (int i = 0; i < nbFigure; i++) {
+		for (int i = 0; i < this->getNbFigure(); i++) {
 			if (this->figureActuel[i]->vu == false) {
 				std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
 			}
@@ -73,7 +76,7 @@ namespace COO {
 	void joueur::afficherChoixFigure() {
 		std::cout << "Que voulez-vous prende ?"<<std::endl<<std::endl;
 
-		for (int i = 0; i < nbFigure; i++) {
+		for (int i = 0; i < this->getNbFigure(); i++) {
 			if (this->figureActuel[i]->vu == false) {
 				std::cout << "Entrez "<<i+1<<" pour "<<this->figureActuel[i]->nomFigure<<std::endl;
 			}
@@ -103,12 +106,12 @@ namespace COO {
 		lancerDe();
 		afficherValeur();
 
-		while (compteurLance < 3 && relancerDe) {
-			std::cout << "relancer (O/N) " << compteurLance << "/" << nbRelance << std::endl;
+		while (compteurLance < this->getNbRelance() && relancerDe) {
+			std::cout << "relancer (O/N) " << compteurLance << "/" << this->getNbRelance() << std::endl;
 
 			if (!lancerJoueur.isTousGarder()) {
 				std::cout << "garder les des ";
-				for (int i = 0; i < this->nbDe; i++) {
+				for (int i = 0; i < this->getNbDe(); i++) {
 					if (!lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
@@ -118,7 +121,7 @@ namespace COO {
 
 			if (!lancerJoueur.isAucunGarder()) {
 				std::cout << "ne plus garder les des ";
-				for (int i = 0; i < this->nbDe; i++) {
+				for (int i = 0; i < this->getNbDe(); i++) {
 					if (lancerJoueur.isGarder(i)) {
 						std::cout << i + 1 << ",";
 					}
@@ -145,6 +148,7 @@ namespace COO {
 				afficherValeur();
 				compteurLance++;
 			}
+
 
 			else {
 				std::cout << "ERREUR : Charactere non reconnu" << std::endl;
@@ -201,17 +205,25 @@ namespace COO {
 		return numChoixFigue;
 	}
 
-	void joueur::setPartieJoueur(int nbFig, std::vector<visibiliteFigure*> visibFig)
+	void joueur::setPartieJoueur(const int* nbD,const int* nbReroll,const int* nbFig, std::vector<visibiliteFigure*> visibFig,const char* SAVE)
 	{
+		this->nbDe = nbD;
 		this->nbFigure=nbFig;
-		this->figureActuel = visibFig;
+		this->nbRelance = nbReroll;
+		std::vector<visibiliteFigure*> figureJ;
+
+		for (visibiliteFigure* v : visibFig) {
+			figureJ.push_back(new visibiliteFigure(*v));  //necessaire car un simple vecteur de pointeur donne directement fais que les joueurs pointent sur les meme visibiliteFigure
+		}
+		this->figureActuel = figureJ;
+		this->SAVEFILE = SAVE;
 	}
 
 	void joueur::choisirFigure(int numChoixFigue) {
 		bool choixValide = false;
 
 		while (!choixValide) {
-				if (numChoixFigue >= 0 && numChoixFigue < nbFigure) {
+				if (numChoixFigue >= 0 && numChoixFigue < this->getNbFigure()) {
 					choixValide = this->validerFigure(numChoixFigue);
 				}
 				else {
@@ -224,10 +236,21 @@ namespace COO {
 		}
 	}
 
+	int joueur::getNbFigure() {
+		return this->nbFigure[0];
+	}
+	int joueur::getNbDe() {
+		return this->nbDe[0];
+	}
+	int joueur::getNbRelance() {
+		return *(this->nbRelance);
+	}
+
 	bool joueur::validerFigure(int i) {
 		if (this->figureActuel[i]->vu == false) {
 			this->point += this->figureActuel[i]->valeur;
 			this->figureActuel[i]->vu = true;
+
 
 			if (i >= 0 && i <= 5 && this->pointPrime>0) { //regarde si on est dans la partie superieure et si la pime a deja ete prise
 				this->pointPrime -= this->figureActuel[i]->valeur;
@@ -240,11 +263,38 @@ namespace COO {
 				this->afficherChoixIa(i);
 			}
 
+
 			return true;
 		}
 		else {
 			std::cout << "ERREUR figure deja choisie"<<std::endl;
 		}
 		return false;
+	}
+	void joueur::sauvegarderJoueur()
+	{
+		std::ofstream myfile;
+		myfile.open(this->SAVEFILE, std::ios_base::app);
+		myfile << this->point<<std::endl;
+		myfile << this->pointPrime<<std::endl;
+
+		if (this->typeJ->getType() == typeJoueur::iaMax) {
+			myfile << 0 << std::endl;
+		}
+		else if (this->typeJ->getType() == typeJoueur::iaRandom) {
+			myfile << 1 << std::endl;
+		}
+		else if (this->typeJ->getType() == typeJoueur::humain) {
+			myfile << 2 << std::endl;
+		}
+		for (int i = 0; i < this->getNbFigure(); i++) {
+			myfile << this->figureActuel[i]->vu << " " << this->figureActuel[i]->valeur << " " << i << std::endl;
+		}
+		myfile << std::endl;
+		myfile.close();
+	}
+	strategyDe* joueur::getTypeJ()
+	{
+		return this->typeJ;
 	}
 }

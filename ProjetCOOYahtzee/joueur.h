@@ -11,12 +11,13 @@ namespace COO {
 	private:
 		int point;
 		int pointPrime = 63;
-		const static int nbDe = 5;
-		const static int nbRelance = 3;
-		int nbFigure;
+		const int* nbDe;
+		const int* nbRelance;
+		const int *nbFigure;
 		lancer lancerJoueur;
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe *typeJ;
+		const char* SAVEFILE;
 	public :
 		joueur(typeJoueur);
 		int getScore();
@@ -25,14 +26,16 @@ namespace COO {
 		void afficherChoixIa(int i);
 		void afficherChoixFigure();
 		bool isIA();
-		int iaRandom();
-		int iaMax();
 		void choisirDeJoueur();
 		void jouer();
 		void choisirFigure(int);
+		int getNbFigure();
 		bool validerFigure(int);
 		int entrerNumFigure();
-		void setPartieJoueur(int, std::vector<visibiliteFigure*>);
-
+		void setPartieJoueur(const int*,const int*,const int*, std::vector<visibiliteFigure*>,const char*);
+		void sauvegarderJoueur();
+		strategyDe* getTypeJ();
+		int getNbDe();
+		int getNbRelance();
 	};
 }

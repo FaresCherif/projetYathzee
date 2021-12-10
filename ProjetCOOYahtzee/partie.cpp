@@ -6,6 +6,8 @@
 #include "suite.h"
 #include "full.h"
 #include "chance.h"
+#include <fstream>
+
 
 namespace COO {
 	partie::partie(std::vector<joueur*> vecJoueur)
@@ -29,7 +31,7 @@ namespace COO {
 		figureJoueur.push_back(new visibiliteFigure(new chance, "chance"));
 
 		for (joueur* j : vecJoueur) {
-			j->setPartieJoueur(this->nbFigure, figureJoueur);
+			j->setPartieJoueur(&this->nbDe,&this->nbRelance,&this->nbFigure, figureJoueur, SAVE);
 		}
 	}
 
@@ -43,6 +45,10 @@ namespace COO {
 
 				nbJoueur++;
 			}
+
+			if (i == 5) {
+				this->sauvegarder();
+			}
 		}
 
 		int nbJoueur = 1;
@@ -51,5 +57,21 @@ namespace COO {
 			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
 			nbJoueur++;
 		}
+	}
+	void partie::sauvegarder()
+	{
+		std::ofstream myfile;
+		myfile.open(this->SAVE);
+		myfile << this->nbFigure<<std::endl;
+		myfile << this->nbDe << std::endl;
+		myfile << this->nbRelance << std::endl;
+		myfile << this->SAVE << std::endl;
+
+		for (joueur* f : joueurs) {
+			
+			f->sauvegarderJoueur();
+		}
+		myfile.close();
+
 	}
 }
