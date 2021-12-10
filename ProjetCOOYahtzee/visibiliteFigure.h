@@ -17,6 +17,10 @@ namespace COO {
 		visibiliteFigure(figure*,std::string);
 		bool getFigureVu();
 		int valeurFigure();
+		visibiliteFigure(visibiliteFigure const&);
+		visibiliteFigure(bool v, int val, std::string nom, figure*);
+		std::string getNom();
+		figure* getFigure();
 	};
 
 }

@@ -6,34 +6,38 @@
 #include "suite.h"
 #include "full.h"
 #include "chance.h"
+#include <fstream>
+#include <sstream>
+
 
 namespace COO {
 	partie::partie(std::vector<joueur*> vecJoueur)
 	{
 		this->joueurs = vecJoueur;
 
-		std::vector<visibiliteFigure*> figureJoueur;
 
-		figureJoueur.push_back(new visibiliteFigure(new nombre<1>, "un"));
-		figureJoueur.push_back(new visibiliteFigure(new nombre<2>, "deux"));
-		figureJoueur.push_back(new visibiliteFigure(new nombre<3>, "trois"));
-		figureJoueur.push_back(new visibiliteFigure(new nombre<4>, "quatre"));
-		figureJoueur.push_back(new visibiliteFigure(new nombre<5>, "cinq"));
-		figureJoueur.push_back(new visibiliteFigure(new nombre<6>, "six"));
-		figureJoueur.push_back(new visibiliteFigure(new multiple<3>, "brelan"));
-		figureJoueur.push_back(new visibiliteFigure(new full, "full"));
-		figureJoueur.push_back(new visibiliteFigure(new multiple<4>, "carree"));
-		figureJoueur.push_back(new visibiliteFigure(new suite<4>, "petiteSuite"));
-		figureJoueur.push_back(new visibiliteFigure(new suite<5>, "grandeSuite"));
-		figureJoueur.push_back(new visibiliteFigure(new multiple<5>, "yahtzee"));
-		figureJoueur.push_back(new visibiliteFigure(new chance, "chance"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<1>, "un"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<2>, "deux"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<3>, "trois"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<4>, "quatre"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<5>, "cinq"));
+		this->figureJoueur.push_back(new visibiliteFigure(new nombre<6>, "six"));
+		this->figureJoueur.push_back(new visibiliteFigure(new multiple<3>, "brelan"));
+		this->figureJoueur.push_back(new visibiliteFigure(new full, "full"));
+		this->figureJoueur.push_back(new visibiliteFigure(new multiple<4>, "carree"));
+		this->figureJoueur.push_back(new visibiliteFigure(new suite<4>, "petiteSuite"));
+		this->figureJoueur.push_back(new visibiliteFigure(new suite<5>, "grandeSuite"));
+		this->figureJoueur.push_back(new visibiliteFigure(new multiple<5>, "yahtzee"));
+		this->figureJoueur.push_back(new visibiliteFigure(new chance, "chance"));
 
 		for (joueur* j : vecJoueur) {
-			j->setPartieJoueur(this->nbFigure, figureJoueur);
+			j->setPartieJoueur(&this->nbDe,&this->nbRelance,&this->nbFigure, figureJoueur, SAVE);
 		}
 	}
 
 	void partie::jouer() {
+
+
 		for (int i = 0; i < this->nbFigure; i++) {
 			int nbJoueur = 1;
 			for (joueur *f : joueurs) {
@@ -43,6 +47,14 @@ namespace COO {
 
 				nbJoueur++;
 			}
+
+			if (i == 5) {
+				std::cout << "-----------Sauvegarde--------------\t\t"<<std::endl;
+
+				this->sauvegarder(i+1);
+			}
+
+	
 		}
 
 		int nbJoueur = 1;
@@ -51,5 +63,127 @@ namespace COO {
 			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
 			nbJoueur++;
 		}
+
+		int i=this->charger();
+
+		std::cout << "-----------Chargement--------------\t\t"<<std::endl;
+
+		std::cout << "joueur : " << joueurs.size() << std::endl;;
+		for (i; i < this->nbFigure; i++) {
+			
+			int nbJoueur = 1;
+			for (joueur* f : joueurs) {
+				std::cout << f->getNbFigure()<<" "<<f->getFigure().size();
+				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+				f->jouer();
+				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
+
+				nbJoueur++;
+			}
+		}
+	}
+	void partie::sauvegarder(int i) //creer notre propre fichier de sauvegarde
+	{
+		std::ofstream myfile;
+		myfile.open(this->SAVE);
+		myfile << i<<std::endl;
+
+		for (joueur* f : joueurs) {
+			
+			f->sauvegarderJoueur();
+		}
+		myfile.close();
+
+	}
+	int partie::charger() 
+	{
+		joueurs.clear();
+		std::ifstream fichier(this->SAVE);
+		int numTour;
+
+		if (fichier)
+		{
+
+			std::string ligne;
+			int cpt = -1;
+			int numIA;
+			int pt;
+			int ptPrime;
+
+			std::vector<visibiliteFigure*> figureJCharger;
+
+			while (getline(fichier, ligne)) 
+			{
+				try {
+					int numSave = (stoi(ligne));
+					//std::cout << ligne << std::endl;
+					
+						if (cpt == -1) {
+							numTour = numSave;
+						}
+						else if (cpt % 17==0) {
+							numIA = numSave;
+						}
+						else if (cpt % 17 == 1) {
+							pt = numSave;
+						}
+						else if (cpt % 17 == 2) {
+							ptPrime = numSave;
+						}
+						else {
+
+							std::istringstream iss(ligne);
+							std::vector<std::string> result;
+
+							for (std::string s; iss >> s;)
+								result.push_back(s);
+							int n = result.size();
+
+							int boolVu = stoi(result[0]);
+							int val = stoi(result[1]);
+							int numFig = stoi(result[2]);
+
+							figureJCharger.push_back(new visibiliteFigure(boolVu,val,this->figureJoueur.at(numFig)->getNom(),this->figureJoueur.at(numFig)->getFigure()));
+							
+
+						}
+					
+					
+				}
+
+				catch (...) {
+					std::cout << cpt << std::endl;
+					joueur* j;
+					switch (numIA)
+					{
+					case 0:
+						 j = new joueur(typeJoueur::iaMax);
+						break;
+					case 1 :
+						j = new joueur(typeJoueur::iaRandom);
+						break;
+					default:
+						j= new joueur(typeJoueur::humain);
+						break;
+					}
+					/*
+					std::cout << "ajout joueur" << ligne<<std::endl;
+					for (int i = 0; i < figureJCharger.size(); i++) {
+						std::cout << figureJCharger.at(i)->getNom()<<std::endl;
+					}
+					*/
+					j->charger(pt,ptPrime,&(this->nbDe),&(this->nbRelance),&(this->nbFigure),figureJCharger,this->SAVE);
+					joueurs.push_back(j);
+					figureJCharger.clear();
+				}
+				cpt++;
+			}
+		}
+		else
+		{
+			std::cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << std::endl;
+		}
+
+		return numTour;
 	}
 }
