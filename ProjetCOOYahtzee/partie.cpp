@@ -33,93 +33,32 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer(Diff difficulte) {
-
-		if (difficulte == Diff::facile)
-		{
-			std::cout << "Vous avez choisit un level facile, donc vous avez le droit de choisir librement entre vos 13 figure bonne chance ! " << std::endl;
+	void partie::jouer(Diff difficulte) {		
 			for (int i = 0; i < this->nbFigure; i++) {
 				int nbJoueur = 1;
 				for (joueur* f : joueurs) {
 					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-					f->jouer_partie_facile();
+					if (difficulte == Diff::facile) {
+						f->jouer(joueur::Diff::facile);
+					}
+					else if (difficulte == Diff::moyen) {
+						f->jouer(joueur::Diff::moyen);
+					}
+					else if (difficulte == Diff::difficile) {
+						f->jouer(joueur::Diff::difficile);
+					}
+					else if (difficulte == Diff::hardcore) {
+						f->jouer(joueur::Diff::hardcore);
+					}
 					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
-
 					nbJoueur++;
 				}
+
 			}
 			int nbJoueur = 1;
-
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
 				nbJoueur++;
 			}
-		}
-		else if (difficulte == Diff::moyen)
-		{
-			std::cout << "Vous avez choisit un level facile, donc vous devez prioriser la partie superieur des 13 figures ! " << std::endl;
-			for (int i = 0; i < this->nbFigure; i++) {
-				int nbJoueur = 1;
-				for (joueur* f : joueurs) {
-					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-					f->jouer_partie_moyen();
-					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
-
-					nbJoueur++;
-				}
-			}
-			int nbJoueur = 1;
-
-			for (joueur* f : joueurs) {
-				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
-				nbJoueur++;
-			}
-		}
-		else if (difficulte == Diff::difficile)
-		{
-			std::cout << "Vous avez choisit un level difficile, vous etes obliger de choisir les figures de 1 a 13 successivement ! " << std::endl;
-			for (int i = 0; i < this->nbFigure; i++) {
-				int nbJoueur = 1;
-				for (joueur* f : joueurs) {
-					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-					f->jouer_partie_difficile();
-					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
-
-					nbJoueur++;
-				}
-			}
-			int nbJoueur = 1;
-
-			for (joueur* f : joueurs) {
-				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
-				nbJoueur++;
-			}
-		}
-		else if (difficulte == Diff::hardcore)
-		{
-			std::cout << "Vous avez choisit un level hardcore, vos figures seront selectionner aleatoirement ! " << std::endl;
-			for (int i = 0; i < this->nbFigure; i++) {
-				int nbJoueur = 1;
-				for (joueur* f : joueurs) {
-					std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-					f->jouer_partie_hardcore();
-					std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
-
-					nbJoueur++;
-				}
-			}
-			int nbJoueur = 1;
-
-			for (joueur* f : joueurs) {
-				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
-				nbJoueur++;
-			}
-		}
-		else {
-
-			
-		}
-
-		
 	}
 }

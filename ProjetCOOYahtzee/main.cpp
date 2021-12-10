@@ -35,21 +35,27 @@ int main() {
 	switch (level)
 	{
 	case 1 :
+		std::cout << "Vous avez choisit un level facile, donc vous avez le droit de choisir librement entre vos 13 figure bonne chance ! " << std::endl;
 		p.jouer(Diff::facile);
 		break;
 	case 2:
+		std::cout << "Vous avez choisit un level moyen, donc vous devez prioriser la partie superieur des 13 figures ! " << std::endl;
 		p.jouer(Diff::moyen);
 		break;
 	case 3:
+		std::cout << "Vous avez choisit un level difficile, vous etes obliger de choisir les figures de 1 a 13 successivement ! " << std::endl;
 		p.jouer(Diff::difficile);
 		break;
 	case 4:
+		std::cout << "Vous avez choisit un level hardcore, vos figures seront selectionner aleatoirement ! " << std::endl;
 		p.jouer(Diff::hardcore);
 		break;
 	default:
 		std::cout << "veuillez choisir un level existant" << std::endl;
 
 	}
+
+
 	
 
 	
