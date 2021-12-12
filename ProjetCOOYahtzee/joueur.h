@@ -39,5 +39,9 @@ namespace COO {
 		int getNbRelance();
 		std::vector<visibiliteFigure*> getFigure();
 		joueur* charger(int,int,const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE);
+		~joueur();
+		joueur& operator=(const joueur&);
+		joueur(const joueur&);
+		void setFigureNouvellePartie();
 	};
 }

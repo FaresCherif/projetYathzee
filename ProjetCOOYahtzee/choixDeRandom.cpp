@@ -28,4 +28,5 @@ namespace COO {
 	{
 		this->type = typeJoueur::iaRandom;
 	}
+
 }

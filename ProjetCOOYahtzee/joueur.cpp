@@ -311,4 +311,101 @@ namespace COO {
 	std::vector<visibiliteFigure*> joueur::getFigure() {
 		return this->figureActuel;
 	}
+
+	joueur::~joueur() {
+		delete this->typeJ;
+		for (int i = 0; i < this->figureActuel.size(); i++) {
+			delete this->figureActuel.at(i);
+		}
+	}
+
+	joueur& joueur::operator=(const joueur& j) {
+		if (this != &j) {
+			for (int i = 0; i < this->figureActuel.size(); ++i) {
+				if (this->figureActuel.at(i) != nullptr) {
+					delete this->figureActuel.at(i);
+				}
+			}
+
+
+			if (j.nbDe != nullptr) {				// si la partie a ete initialise
+				this->nbDe = j.nbDe;
+				this->nbRelance = j.nbRelance;
+				this->nbFigure = j.nbFigure;
+				this->lancerJoueur = j.lancerJoueur;
+				this->SAVEFILE = j.SAVEFILE;
+				this->pointPrime = j.pointPrime;
+				for (int i = 0; i < j.figureActuel.size(); ++i) {
+					if (j.figureActuel.at(i) != nullptr)
+						this->figureActuel.at(i) = new visibiliteFigure(*(j.figureActuel.at(i))); // copie en profondeur
+					else
+						this->figureActuel.at(i) = nullptr;
+				}
+
+			}
+
+			this->point = j.point;
+
+			switch (j.typeJ->getType())
+			{
+			case typeJoueur::humain:
+				this->typeJ = new choixDeHumain;
+				break;
+			case typeJoueur::iaRandom:
+				this->typeJ = new choixDeRandom;
+				break;
+			case typeJoueur::iaMax:
+				this->typeJ = new choixDeMax;
+				break;
+			default:
+				break;
+			}
+
+		}
+		return *this;
+	}
+
+	joueur::joueur(const joueur& j) {
+		if (j.nbDe != nullptr) {				// si la partie a ete initialise
+			this->nbDe = j.nbDe;
+			this->nbRelance = j.nbRelance;
+			this->nbFigure = j.nbFigure;
+			this->lancerJoueur = j.lancerJoueur;
+			this->SAVEFILE = j.SAVEFILE;
+			this->pointPrime = j.pointPrime;
+			for (int i = 0; i < j.figureActuel.size(); ++i) {
+				if (j.figureActuel.at(i) != nullptr)
+					this->figureActuel.at(i) = new visibiliteFigure(*(j.figureActuel.at(i))); // copie en profondeur
+				else
+					this->figureActuel.at(i) = nullptr;
+			}
+		}
+
+		this->point = j.point;
+		std::cout << this->typeJ << std::endl;
+
+		switch (j.typeJ->getType())
+		{
+		case typeJoueur::humain:
+			this->typeJ = new choixDeHumain;
+			break;
+		case typeJoueur::iaRandom:
+			this->typeJ = new choixDeRandom;
+			break;
+		case typeJoueur::iaMax:
+			this->typeJ = new choixDeMax;
+			break;
+		default:
+			break;
+		}
+
+
+	}
+	void joueur::setFigureNouvellePartie()
+	{
+		for (visibiliteFigure* f : this->figureActuel) {
+			f->valeur = 0;
+			f->vu = false;
+		}
+	}
 }

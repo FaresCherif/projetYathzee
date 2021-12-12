@@ -16,5 +16,9 @@ namespace COO {
 		void jouer();
 		void sauvegarder(int);
 		int charger();
+		~partie();
+		partie& operator=(const partie&);
+		partie(const partie&);
+
 	};
 }

@@ -18,18 +18,27 @@ int main() {
 	joueur j3(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;
+	std::vector<joueur*> vecVide;
+
 	//vecJoueurs.push_back(&j1);
 	vecJoueurs.push_back(&j2);
 	vecJoueurs.push_back(&j3);
 
-	partie p(vecJoueurs);
-	p.jouer();
+	joueur j4(j3);
+	
+	vecJoueurs.push_back(&j4);
 
+	partie p(vecJoueurs);
+	partie p2(p);
+	std::cout << "parties cree"<<std::endl;
+
+	p.jouer();
+	p2.jouer();
 	sf::RenderWindow window(sf::VideoMode(1500, 800, 32), "YAHTZEE");
 	window.clear(sf::Color(0, 255, 0));
 	sf::Texture background;
 
-	background.loadFromFile("b.jpg");
+	background.loadFromFile("image/background.jpg");
 	sf::Sprite s(background);
 	float width = (float)window.getSize().x / background.getSize().x;
 	float height = (float)window.getSize().y / background.getSize().y;
@@ -55,6 +64,7 @@ int main() {
 			}
 		}
 	}
+
 
 	return 0;
 }

@@ -30,13 +30,16 @@ namespace COO {
 		this->figureJoueur.push_back(new visibiliteFigure(new multiple<5>, "yahtzee"));
 		this->figureJoueur.push_back(new visibiliteFigure(new chance, "chance"));
 
-		for (joueur* j : vecJoueur) {
+
+		for (joueur* j : this->joueurs) {
 			j->setPartieJoueur(&this->nbDe,&this->nbRelance,&this->nbFigure, figureJoueur, SAVE);
 		}
 	}
 
 	void partie::jouer() {
-
+		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
+			j->setFigureNouvellePartie();
+		}
 
 		for (int i = 0; i < this->nbFigure; i++) {
 			int nbJoueur = 1;
@@ -186,4 +189,59 @@ namespace COO {
 
 		return numTour;
 	}
+
+	partie::~partie()
+	{
+
+		std::cout << "destructeur"<<std::endl;
+		for (int i = 0; i < this->figureJoueur.size(); ++i) {  //destruction des figures
+			if (this->figureJoueur.at(i) != nullptr)
+				delete this->figureJoueur.at(i);
+		}
+
+
+
+		//std::cout <<"partie detruite " << std::endl;
+	}
+
+	partie& partie::operator=(const partie& p)
+	{
+		if (this != &p) {
+			for (int i = 0; i < this->figureJoueur.size(); ++i) {
+				if (this->figureJoueur.at(i) != nullptr) {
+					delete this->figureJoueur.at(i);
+				}
+			}
+
+			for (int i = 0; i < p.figureJoueur.size(); ++i) {
+				if (p.figureJoueur.at(i) != nullptr)
+					this->figureJoueur.push_back(new visibiliteFigure(*(p.figureJoueur.at(i))));
+				else
+					this->figureJoueur.push_back(nullptr);
+			}
+
+			this->joueurs = p.joueurs;
+		}
+		return *this;
+	}
+
+	partie::partie(const partie& p)
+	{
+
+
+		this->joueurs = p.joueurs;
+
+
+
+		for (int i = 0; i < p.figureJoueur.size(); ++i) {
+			if (p.figureJoueur.at(i) != nullptr)
+				this->figureJoueur.push_back(new visibiliteFigure(*(p.figureJoueur.at(i))));
+			else
+				this->figureJoueur.push_back(nullptr);
+		}
+	}
+
+	
+
+
 }

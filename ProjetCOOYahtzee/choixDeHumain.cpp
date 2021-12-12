@@ -9,4 +9,5 @@ namespace COO {
 	{
 		this->type = typeJoueur::humain;
 	}
+
 }
