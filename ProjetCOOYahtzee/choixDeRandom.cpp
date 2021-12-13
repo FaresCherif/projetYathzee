@@ -29,4 +29,9 @@ namespace COO {
 		this->type = typeJoueur::iaRandom;
 	}
 
+	typeJoueur choixDeRandom::getType() const
+	{
+		return strategyDe::getType();
+	}
+
 }

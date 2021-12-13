@@ -34,6 +34,11 @@ int main() {
 
 	p.jouer();
 	p2.jouer();
+	int a = 1;
+	int b = 2;
+
+
+
 	sf::RenderWindow window(sf::VideoMode(1500, 800, 32), "YAHTZEE");
 	window.clear(sf::Color(0, 255, 0));
 	sf::Texture background;
@@ -64,7 +69,6 @@ int main() {
 			}
 		}
 	}
-
 
 	return 0;
 }

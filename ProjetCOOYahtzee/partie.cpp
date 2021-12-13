@@ -228,10 +228,7 @@ namespace COO {
 	partie::partie(const partie& p)
 	{
 
-
 		this->joueurs = p.joueurs;
-
-
 
 		for (int i = 0; i < p.figureJoueur.size(); ++i) {
 			if (p.figureJoueur.at(i) != nullptr)
