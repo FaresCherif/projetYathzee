@@ -21,7 +21,7 @@
 namespace COO {
 	joueur::joueur(typeJoueur ia)
 	{
-
+		//just to backup
 		this->point = 0; // instancie le nombre de points a 0
 
 		switch (ia)

@@ -8,7 +8,7 @@
 
 namespace COO {
 
-	class joueur {
+	class joueur {//just to backup
 	private:
 		int point;
 		int pointPrime = 63;

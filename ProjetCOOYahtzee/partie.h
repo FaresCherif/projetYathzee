@@ -4,7 +4,7 @@
 
 
 namespace COO {
-	class partie {
+	class partie { // just to backup
 	private:
 		std::vector<joueur*> joueurs;
 		const int nbFigure = 13;
