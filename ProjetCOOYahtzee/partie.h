@@ -4,7 +4,8 @@
 
 
 namespace COO {
-	class partie { // just to backup
+	enum Diff { facile, moyen, difficile, hardcore };
+	class partie {
 	private:
 		std::vector<joueur*> joueurs;
 		const int nbFigure = 13;
@@ -15,7 +16,7 @@ namespace COO {
 
 	public:
 		partie(std::vector<joueur*>);
-		void jouer(sf::RenderWindow* window);
+		void jouer(sf::RenderWindow* window, Diff);
 		void sauvegarder(int);
 		int charger();
 		~partie();

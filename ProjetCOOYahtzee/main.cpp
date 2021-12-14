@@ -108,7 +108,7 @@ int main() {
 					window.draw(cinquiemeDeSprite);
 
 					window.display();
-					p.jouer(&window);
+					p.jouer(&window,Diff::facile);
 
 				}
 			}
