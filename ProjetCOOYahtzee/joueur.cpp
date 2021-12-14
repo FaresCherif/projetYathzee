@@ -1,7 +1,5 @@
 #include "joueur.h"
-
 #include "nombre.h"
-
 #include "full.h"
 #include "yahtzee.h"
 #include "chance.h"

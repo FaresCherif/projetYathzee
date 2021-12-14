@@ -11,7 +11,7 @@
 #include <SFML/Graphics.hpp>
 
 
-namespace COO {//just to backup
+namespace COO {
 	partie::partie(std::vector<joueur*> vecJoueur)
 	{
 		this->joueurs = vecJoueur;
@@ -33,53 +33,73 @@ namespace COO {//just to backup
 
 
 		for (joueur* j : this->joueurs) {
-			j->setPartieJoueur(&this->nbDe,&this->nbRelance,&this->nbFigure, figureJoueur, SAVE);
+			j->setPartieJoueur(&this->nbDe, &this->nbRelance, &this->nbFigure, figureJoueur, SAVE);
 		}
 	}
 
-	void partie::jouer(sf::RenderWindow* window) {
+	void partie::jouer(sf::RenderWindow* window, Diff difficulte) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
 		}
 
 		for (int i = 0; i < this->nbFigure; i++) {
 			int nbJoueur = 1;
-			for (joueur *f : joueurs) {
-				std::cout << "Le joueur "<<nbJoueur<<" a " << f->getScore() << " points" << std::endl;
-				f->jouer(window);
-				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl<<std::endl<<std::endl;
+			for (joueur* f : joueurs) {
+				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+				if (difficulte == Diff::facile) {
+					f->jouer(window, joueur::Diff::facile);
+				}
+				else if (difficulte == Diff::moyen) {
+					f->jouer(window, joueur::Diff::moyen);
+				}
+				else if (difficulte == Diff::difficile) {
+					f->jouer(window, joueur::Diff::difficile);
+				}
+				else if (difficulte == Diff::hardcore) {
+					f->jouer(window, joueur::Diff::hardcore);
+				}
+				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
 			}
 
 			if (i == 5) {
-				std::cout << "-----------Sauvegarde--------------\t\t"<<std::endl;
+				std::cout << "-----------Sauvegarde--------------\t\t" << std::endl;
 
-				this->sauvegarder(i+1);
+				this->sauvegarder(i + 1);
 			}
-
-	
 		}
 
 		int nbJoueur = 1;
 
 		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore()<<" points "<<std::endl;
+			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
 			nbJoueur++;
 		}
 
-		int i=this->charger();
+		int i = this->charger();
 
-		std::cout << "-----------Chargement--------------\t\t"<<std::endl;
+		std::cout << "-----------Chargement--------------\t\t" << std::endl;
 
 		std::cout << "joueur : " << joueurs.size() << std::endl;;
 		for (i; i < this->nbFigure; i++) {
-			
+
 			int nbJoueur = 1;
 			for (joueur* f : joueurs) {
-				std::cout << f->getNbFigure()<<" "<<f->getFigure().size();
+				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-				f->jouer(window);
+				if (difficulte == Diff::facile) {
+					f->jouer(window, joueur::Diff::facile);
+				}
+				else if (difficulte == Diff::moyen) {
+					f->jouer(window, joueur::Diff::moyen);
+				}
+				else if (difficulte == Diff::difficile) {
+					f->jouer(window, joueur::Diff::difficile);
+				}
+				else if (difficulte == Diff::hardcore) {
+					f->jouer(window, joueur::Diff::hardcore);
+				}
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
@@ -90,16 +110,16 @@ namespace COO {//just to backup
 	{
 		std::ofstream myfile;
 		myfile.open(this->SAVE);
-		myfile << i<<std::endl;
+		myfile << i << std::endl;
 
 		for (joueur* f : joueurs) {
-			
+
 			f->sauvegarderJoueur();
 		}
 		myfile.close();
 
 	}
-	int partie::charger() 
+	int partie::charger()
 	{
 		joueurs.clear();
 		std::ifstream fichier(this->SAVE);
@@ -116,43 +136,43 @@ namespace COO {//just to backup
 
 			std::vector<visibiliteFigure*> figureJCharger;
 
-			while (getline(fichier, ligne)) 
+			while (getline(fichier, ligne))
 			{
 				try {
 					int numSave = (stoi(ligne));
 					//std::cout << ligne << std::endl;
-					
-						if (cpt == -1) {
-							numTour = numSave;
-						}
-						else if (cpt % 17==0) {
-							numIA = numSave;
-						}
-						else if (cpt % 17 == 1) {
-							pt = numSave;
-						}
-						else if (cpt % 17 == 2) {
-							ptPrime = numSave;
-						}
-						else {
 
-							std::istringstream iss(ligne);
-							std::vector<std::string> result;
+					if (cpt == -1) {
+						numTour = numSave;
+					}
+					else if (cpt % 17 == 0) {
+						numIA = numSave;
+					}
+					else if (cpt % 17 == 1) {
+						pt = numSave;
+					}
+					else if (cpt % 17 == 2) {
+						ptPrime = numSave;
+					}
+					else {
 
-							for (std::string s; iss >> s;)
-								result.push_back(s);
-							int n = result.size();
+						std::istringstream iss(ligne);
+						std::vector<std::string> result;
 
-							int boolVu = stoi(result[0]);
-							int val = stoi(result[1]);
-							int numFig = stoi(result[2]);
+						for (std::string s; iss >> s;)
+							result.push_back(s);
+						int n = result.size();
 
-							figureJCharger.push_back(new visibiliteFigure(boolVu,val,this->figureJoueur.at(numFig)->getNom(),this->figureJoueur.at(numFig)->getFigure()));
-							
+						int boolVu = stoi(result[0]);
+						int val = stoi(result[1]);
+						int numFig = stoi(result[2]);
 
-						}
-					
-					
+						figureJCharger.push_back(new visibiliteFigure(boolVu, val, this->figureJoueur.at(numFig)->getNom(), this->figureJoueur.at(numFig)->getFigure()));
+
+
+					}
+
+
 				}
 
 				catch (...) {
@@ -161,13 +181,13 @@ namespace COO {//just to backup
 					switch (numIA)
 					{
 					case 0:
-						 j = new joueur(typeJoueur::iaMax);
+						j = new joueur(typeJoueur::iaMax);
 						break;
-					case 1 :
+					case 1:
 						j = new joueur(typeJoueur::iaRandom);
 						break;
 					default:
-						j= new joueur(typeJoueur::humain);
+						j = new joueur(typeJoueur::humain);
 						break;
 					}
 					/*
@@ -176,7 +196,7 @@ namespace COO {//just to backup
 						std::cout << figureJCharger.at(i)->getNom()<<std::endl;
 					}
 					*/
-					j->charger(pt,ptPrime,&(this->nbDe),&(this->nbRelance),&(this->nbFigure),figureJCharger,this->SAVE);
+					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE);
 					joueurs.push_back(j);
 					figureJCharger.clear();
 				}
@@ -194,7 +214,7 @@ namespace COO {//just to backup
 	partie::~partie()
 	{
 
-		std::cout << "destructeur"<<std::endl;
+		std::cout << "destructeur" << std::endl;
 		for (int i = 0; i < this->figureJoueur.size(); ++i) {  //destruction des figures
 			if (this->figureJoueur.at(i) != nullptr)
 				delete this->figureJoueur.at(i);
@@ -239,7 +259,7 @@ namespace COO {//just to backup
 		}
 	}
 
-	
+
 	// just to backup
 
 }
