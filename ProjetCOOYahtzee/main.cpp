@@ -44,6 +44,7 @@ int main() {
 
 
 	backgroundTexture.loadFromFile("image/background.jpg");
+	//just to back up
 	
 	premierDeTexture.loadFromFile("image/dice/1.png");
 	deuxiemeDeTexture.loadFromFile("image/dice/1.png");
@@ -107,7 +108,7 @@ int main() {
 					window.draw(cinquiemeDeSprite);
 
 					window.display();
-					p.jouer(&window, Diff::facile);
+					p.jouer(&window);
 
 				}
 			}

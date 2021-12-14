@@ -21,6 +21,7 @@
 namespace COO {
 	joueur::joueur(typeJoueur ia)
 	{
+		//just to backup
 		this->point = 0; // instancie le nombre de points a 0
 
 		switch (ia)
@@ -185,6 +186,9 @@ namespace COO {
 	}
 
 	void joueur::choisirDeJoueur(sf::RenderWindow* window) {
+
+
+
 		if (this->pointPrime > 0) {
 			std::cout << "Prime dans " << this->pointPrime << " points" << std::endl;
 		}
@@ -256,7 +260,28 @@ namespace COO {
 
 	}
 
+	void joueur::jouer(sf::RenderWindow* window) {
 
+		int choix=0;
+		choixDeRandom cdr;
+
+		switch (this->typeJ->getType()) {
+		case typeJoueur::humain:
+			this->choisirDeJoueur(window);
+			choix = entrerNumFigure();
+			break;
+		case typeJoueur::iaRandom:
+			lancerDe();
+			choix = this->typeJ->choixDe(this->figureActuel,lancerJoueur.getDes());
+			break;
+		case typeJoueur::iaMax:
+			lancerDe();
+			choix = this->typeJ->choixDe(this->figureActuel,lancerJoueur.getDes());
+			break;
+		}
+
+		this->choisirFigure(choix);
+	}
 
 
 	int joueur::entrerNumFigure() {
@@ -295,6 +320,23 @@ namespace COO {
 		}
 		this->figureActuel = figureJ;
 		this->SAVEFILE = SAVE;
+	}
+
+	void joueur::choisirFigure(int numChoixFigue) {
+		bool choixValide = false;
+
+		while (!choixValide) {
+				if (numChoixFigue >= 0 && numChoixFigue < this->getNbFigure()) {
+					choixValide = this->validerFigure(numChoixFigue);
+				}
+				else {
+					std::cout << "ERREUR numero non reconnu" << std::endl;
+				}
+
+				if (!choixValide) {
+					numChoixFigue = entrerNumFigure();
+				}
+		}
 	}
 
 	int joueur::getNbFigure() {
@@ -469,141 +511,4 @@ namespace COO {
 			f->vu = false;
 		}
 	}
-
-	void joueur::jouer(sf::RenderWindow* window, Diff difficulte) {
-
-		int choix = 0;
-		choixDeRandom cdr;
-
-		switch (this->typeJ->getType()) {
-		case typeJoueur::humain:
-			this->choisirDeJoueur(window);
-			if (difficulte == Diff::hardcore)
-			{
-				choix = iaRandom();
-			}
-			else {
-				choix = entrerNumFigure();
-			}
-			break;
-		case typeJoueur::iaRandom:
-			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
-			break;
-		case typeJoueur::iaMax:
-			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
-			break;
-		}
-
-		if (difficulte == Diff::facile)
-		{
-			this->choisirFigure(choix, Diff::facile);
-		}
-		else if (difficulte == Diff::moyen) {
-			this->choisirFigure(choix, Diff::moyen);
-		}
-		else if (difficulte == Diff::difficile) {
-			this->choisirFigure(choix, Diff::difficile);
-		}
-		else if (difficulte == Diff::hardcore) {
-			this->choisirFigure(choix, Diff::hardcore);
-		}
-	}
-
-	void joueur::choisirFigure(int numChoixFigure, Diff difficulte) {
-
-		bool choixValide = false;
-
-		while (!choixValide) {
-			switch (difficulte) {
-
-			case Diff::facile:
-				if (numChoixFigure >= 0 && numChoixFigure < *nbFigure) {
-					choixValide = this->validerFigure(numChoixFigure);
-				}
-				else {
-					std::cout << "ERREUR numero non reconnu" << std::endl;
-				}
-				break;
-			case Diff::moyen:
-				if (numChoixFigure >= 0 && numChoixFigure < (int)*nbFigure / 2) {
-					if (numChoixFigure < (int)*nbFigure / 2)
-					{
-						choixValide = this->validerFigure(numChoixFigure);
-					}
-				}
-				else if (numChoixFigure >= (int)*nbFigure / 2 && numChoixFigure < *nbFigure)
-				{
-					if (
-						this->figureActuel[1]->getFigureVu() == 1 &&
-						this->figureActuel[2]->getFigureVu() == 1 &&
-						this->figureActuel[3]->getFigureVu() == 1 &&
-						this->figureActuel[4]->getFigureVu() == 1 &&
-						(this->figureActuel[5]->getFigureVu() == 1 || this->figureActuel[6]->getFigureVu() == 1)) {
-						choixValide = this->validerFigure(numChoixFigure);
-					}
-					else {
-						std::cout << "Le level est moyen, il faut commencer par la partie supperieur des figures" << std::endl;
-					}
-
-				}
-				break;
-			case Diff::difficile:
-				if (numChoixFigure >= 0 && numChoixFigure < *nbFigure)
-				{
-					if (numChoixFigure == 0)
-					{
-						choixValide = this->validerFigure(numChoixFigure);
-						tmp.push_back(&numChoixFigure);
-					}
-					else if (tmp.size() == numChoixFigure)
-					{
-						choixValide = this->validerFigure(numChoixFigure);
-						tmp.push_back(&numChoixFigure);
-					}
-					else
-					{
-						std::cout << "Le level est difficile, il faut choisir les figures de 1 a 13 successivement " << std::endl;
-					}
-				}
-				break;
-			case Diff::hardcore:
-				if (this->figureActuel[numChoixFigure]->vu == false) {
-					choixValide = this->validerFigure(numChoixFigure);
-					choixValide = true;
-				}
-				break;
-			default:
-				break;
-
-			}
-			if (!choixValide) {
-				numChoixFigure = entrerNumFigure();
-			}
-		}
-
-	}
-
-	int  joueur::iaRandom() {
-		int choix;
-		bool choixValide = false;
-
-		while (!choixValide) {
-			int nbAleatoire;
-
-			std::random_device dev;
-			std::mt19937 rng(dev());
-			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 12); // distribution in range [1, 6]
-			nbAleatoire = dist6(rng);
-
-			if (this->figureActuel[nbAleatoire]->vu == false) {
-				choix = nbAleatoire;
-				choixValide = true;
-				std::cout << "Choix aleatoire numero : " << choix + 1 << std::endl;
-			}
-		}
-		return choix;
-	}
-
 }
