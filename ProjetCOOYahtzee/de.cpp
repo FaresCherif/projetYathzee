@@ -54,4 +54,16 @@ namespace COO {
 		return this->valeur;
 	}
 
+	bool de::operator==(const int num)
+	{
+		if (this->valeur == num) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+
+
 }

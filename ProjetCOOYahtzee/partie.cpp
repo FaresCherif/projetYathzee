@@ -8,6 +8,7 @@
 #include "chance.h"
 #include <fstream>
 #include <sstream>
+#include <SFML/Graphics.hpp>
 
 
 namespace COO {
@@ -36,7 +37,7 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer() {
+	void partie::jouer(sf::RenderWindow* window) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
 		}
@@ -45,7 +46,7 @@ namespace COO {
 			int nbJoueur = 1;
 			for (joueur *f : joueurs) {
 				std::cout << "Le joueur "<<nbJoueur<<" a " << f->getScore() << " points" << std::endl;
-				f->jouer();
+				f->jouer(window);
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl<<std::endl<<std::endl;
 
 				nbJoueur++;
@@ -78,7 +79,7 @@ namespace COO {
 			for (joueur* f : joueurs) {
 				std::cout << f->getNbFigure()<<" "<<f->getFigure().size();
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-				f->jouer();
+				f->jouer(window);
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;

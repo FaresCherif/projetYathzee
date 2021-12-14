@@ -10,7 +10,7 @@ namespace COO {
 		int valFigure(de* des) {
 			int cpt = 0;
 			for (int i = 0; i < 5; i++) {
-				if (des[i].getValeur() == T) {
+				if (des[i] == T) {
 					cpt++;
 				}
 			}

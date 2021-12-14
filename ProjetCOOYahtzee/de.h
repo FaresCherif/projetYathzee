@@ -16,5 +16,6 @@ namespace COO {
 		void afficherValeur();
 		bool isGarder();
 		int getValeur();
+		bool operator==(const int);
 	};
 }
