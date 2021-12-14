@@ -7,7 +7,7 @@
 #include "full.h"
 #include "chance.h"
 
-namespace COO {
+namespace COO {//just to backup
 	partie::partie(std::vector<joueur*> vecJoueur)
 	{
 		this->joueurs = vecJoueur;

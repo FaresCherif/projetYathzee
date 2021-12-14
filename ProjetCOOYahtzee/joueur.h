@@ -4,27 +4,22 @@
 #include <vector>
 #include "visibiliteFigure.h"
 #include "strategyDe.h"
-#include <list>
+#include <SFML/Graphics.hpp>
 
 namespace COO {
 
-	
-
-	class joueur {
+	class joueur {//just to backup
 	private:
 		int point;
 		int pointPrime = 63;
-		const static int nbDe = 5;
-		const static int nbRelance = 3;
-		std::list<int*> tmp;
-		int nbFigure;
+		const int* nbDe;
+		const int* nbRelance;
+		const int *nbFigure;
 		lancer lancerJoueur;
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe *typeJ;
-		enum class Diff { facile, moyen, difficile, hardcore };
-		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
+		const char* SAVEFILE;
 	public :
-		
 		joueur(typeJoueur);
 		int getScore();
 		void lancerDe();
@@ -32,14 +27,23 @@ namespace COO {
 		void afficherChoixIa(int i);
 		void afficherChoixFigure();
 		bool isIA();
-		int iaRandom();
-		int iaMax();
-		void choisirDeJoueur();
-		void jouer(Diff);
-		void choisirFigure(int,Diff);
+		void choisirDeJoueur(sf::RenderWindow*);
+		void jouer(sf::RenderWindow*);
+		void choisirFigure(int);
+		int getNbFigure();
 		bool validerFigure(int);
 		int entrerNumFigure();
-		void setPartieJoueur(int, std::vector<visibiliteFigure*>);
-
+		void setPartieJoueur(const int*,const int*,const int*, std::vector<visibiliteFigure*>,const char*);
+		void sauvegarderJoueur();
+		strategyDe* getTypeJ();
+		int getNbDe();
+		int getNbRelance();
+		std::vector<visibiliteFigure*> getFigure();
+		joueur* charger(int,int,const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE);
+		~joueur();
+		joueur& operator=(const joueur&);
+		joueur(const joueur&);
+		void setFigureNouvellePartie();
+		void afficherWindow(sf::RenderWindow*,int);
 	};
 }
