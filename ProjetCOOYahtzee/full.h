@@ -13,10 +13,10 @@ namespace COO {
 			int full2=full1;
 
 			for (int i = 0; i < 5; i++) {
-				if (des[i].getValeur() == full1) {
+				if (des[i] == full1) {
 					cptFull1++;
 				}
-				else if (des[i].getValeur() == full2) {
+				else if (des[i] == full2) {
 					cptFull2++;
 				}
 				else if (full2==full1) {

@@ -9,4 +9,10 @@ namespace COO {
 	{
 		this->type = typeJoueur::humain;
 	}
+
+	typeJoueur choixDeHumain::getType() const
+	{
+		return strategyDe::getType();
+	}
+
 }

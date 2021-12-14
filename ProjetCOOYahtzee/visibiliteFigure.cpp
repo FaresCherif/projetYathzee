@@ -38,4 +38,11 @@ namespace COO {
 	figure* visibiliteFigure::getFigure() {
 		return this->figureC;
 	}
+
+	/*
+	visibiliteFigure::~visibiliteFigure()
+	{
+		std::cout << "destruction de " << this->nomFigure << std::endl;
+	}
+	*/
 }

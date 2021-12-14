@@ -4,6 +4,7 @@
 #include <vector>
 #include "visibiliteFigure.h"
 #include "strategyDe.h"
+#include <SFML/Graphics.hpp>
 
 namespace COO {
 
@@ -26,8 +27,8 @@ namespace COO {
 		void afficherChoixIa(int i);
 		void afficherChoixFigure();
 		bool isIA();
-		void choisirDeJoueur();
-		void jouer();
+		void choisirDeJoueur(sf::RenderWindow*);
+		void jouer(sf::RenderWindow*);
 		void choisirFigure(int);
 		int getNbFigure();
 		bool validerFigure(int);
@@ -39,5 +40,10 @@ namespace COO {
 		int getNbRelance();
 		std::vector<visibiliteFigure*> getFigure();
 		joueur* charger(int,int,const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE);
+		~joueur();
+		joueur& operator=(const joueur&);
+		joueur(const joueur&);
+		void setFigureNouvellePartie();
+		void afficherWindow(sf::RenderWindow*,int);
 	};
 }

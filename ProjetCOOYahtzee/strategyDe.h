@@ -11,6 +11,6 @@ namespace COO {
 		typeJoueur type;
 	public:
 		virtual int choixDe(std::vector<visibiliteFigure*>,de*) = 0;
-		typeJoueur getType();
+		virtual typeJoueur getType() const = 0;
 	};
 }

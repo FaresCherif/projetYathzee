@@ -6,5 +6,6 @@ namespace COO {
 	public :
 		int choixDe(std::vector<visibiliteFigure*>, de*);
 		choixDeMax();
+		typeJoueur getType() const;
 	};
 }

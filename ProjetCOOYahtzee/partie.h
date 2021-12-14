@@ -1,5 +1,7 @@
 #pragma once
 #include "joueur.h"
+#include <SFML/Graphics.hpp>
+
 
 namespace COO {
 	class partie {
@@ -13,8 +15,12 @@ namespace COO {
 
 	public:
 		partie(std::vector<joueur*>);
-		void jouer();
+		void jouer(sf::RenderWindow* window);
 		void sauvegarder(int);
 		int charger();
+		~partie();
+		partie& operator=(const partie&);
+		partie(const partie&);
+
 	};
 }
