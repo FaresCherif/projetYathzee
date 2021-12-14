@@ -5,20 +5,24 @@
 #include "visibiliteFigure.h"
 #include "strategyDe.h"
 #include <SFML/Graphics.hpp>
+#include <list>
 
 namespace COO {
 
-	class joueur {//just to backup
+	class joueur {
 	private:
 		int point;
 		int pointPrime = 63;
 		const int* nbDe;
 		const int* nbRelance;
 		const int *nbFigure;
+		std::list<int*> tmp;
 		lancer lancerJoueur;
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe *typeJ;
 		const char* SAVEFILE;
+		enum class Diff { facile, moyen, difficile, hardcore };
+		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public :
 		joueur(typeJoueur);
 		int getScore();
@@ -28,8 +32,8 @@ namespace COO {
 		void afficherChoixFigure();
 		bool isIA();
 		void choisirDeJoueur(sf::RenderWindow*);
-		void jouer(sf::RenderWindow*);
-		void choisirFigure(int);
+		void jouer(sf::RenderWindow*,Diff);
+		void choisirFigure(int,Diff);
 		int getNbFigure();
 		bool validerFigure(int);
 		int entrerNumFigure();
@@ -45,5 +49,6 @@ namespace COO {
 		joueur(const joueur&);
 		void setFigureNouvellePartie();
 		void afficherWindow(sf::RenderWindow*,int);
+		int iaRandom();
 	};
 }
