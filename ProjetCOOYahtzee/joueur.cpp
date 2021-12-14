@@ -170,14 +170,21 @@ namespace COO {
 					window->close();
 				}
 				else if (event.type == sf::Event::MouseButtonPressed) {
-					if (relancerDe.clicked(sf::Vector2f(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y))) {
+					if (relancerDe.clicked(sf::Vector2f(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) && relance < this->getNbRelance()) {
 						lancerDe();
 						afficherValeur();
 						afficherWindow(window, relance+1);
 					}
 					else {
 						for (int i = 0; i < this->getNbDe(); i++) {
-
+							if (deSprite.at(i)->getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
+								if (!this->lancerJoueur.isGarder(i)) {
+									this->lancerJoueur.garder(i);
+								}
+								else {
+									this->lancerJoueur.lacher(i);
+								}
+							}
 						}
 					}
 				}
