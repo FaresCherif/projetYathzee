@@ -13,6 +13,7 @@ namespace COO {
 	class joueur {
 	private:
 		int point;
+		bool set = true;
 		int pointPrime = 63;
 		const static int nbDe = 5;
 		const static int nbRelance = 3;
@@ -22,6 +23,7 @@ namespace COO {
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe *typeJ;
 		enum class Diff { facile, moyen, difficile, hardcore };
+		Diff difficulte_local = Diff::facile;
 		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public :
 		
@@ -40,6 +42,5 @@ namespace COO {
 		bool validerFigure(int);
 		int entrerNumFigure();
 		void setPartieJoueur(int, std::vector<visibiliteFigure*>);
-
 	};
 }

@@ -56,12 +56,33 @@ namespace COO {
 	}
 
 	void joueur::afficherValeur() {
-		for (int i = 0; i < nbFigure; i++) {
-			if (this->figureActuel[i]->vu == false) {
-				std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+		
+		if(difficulte_local == Diff::hardcore)
+		{
+			if (set)
+			{
+				srand(time(NULL));
+				for (int i = 0; i < nbFigure; i++) {
+					int nbAleatoire = i + std::rand() % (nbFigure - i);
+					std::swap(figureActuel[i], figureActuel[nbAleatoire]);
+				}
+				set = false;
 			}
-		}
+			for (int i = 0; i < nbFigure; i++) {
+				if (this->figureActuel[i]->vu == false) {
+					std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+				}
+			}
 
+		}
+		else
+		{
+			for (int i = 0; i < nbFigure; i++) {
+				if (this->figureActuel[i]->vu == false) {
+					std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+				}
+			}			
+		}
 	}
 
 	void joueur::afficherChoixIa(int i) {
@@ -74,7 +95,7 @@ namespace COO {
 
 		for (int i = 0; i < nbFigure; i++) {
 			if (this->figureActuel[i]->vu == false) {
-				std::cout << "Entrez "<<i+1<<" pour "<<this->figureActuel[i]->nomFigure<<std::endl;
+				std::cout << "Entrez " << i + 1 << " pour " << this->figureActuel[i]->nomFigure << std::endl;
 			}
 		}
 		std::cout << std::endl;
@@ -135,6 +156,7 @@ namespace COO {
 
 		lancerDe();
 		afficherValeur();
+		
 
 		while (compteurLance < 3 && relancerDe) {
 			std::cout << "relancer (O/N) " << compteurLance << "/" << nbRelance << std::endl;
@@ -175,6 +197,7 @@ namespace COO {
 			}
 			else if (reponse == "O") {
 				lancerDe();
+				std::cout << "i m 3emouta" << std::endl;
 				afficherValeur();
 				compteurLance++;
 			}
@@ -199,11 +222,8 @@ namespace COO {
 
 		while (!numeroValide) {
 			afficherChoixFigure();
-
 			std::string choixFigure;
 			std::cin >> choixFigure;
-
-
 			try {
 				numChoixFigue = (stoi(choixFigure) - 1);
 				numeroValide = true;
@@ -220,7 +240,6 @@ namespace COO {
 		if (this->figureActuel[i]->vu == false) {
 			this->figureActuel[i]->vu = true;
 			this->point += this->figureActuel[i]->valeur;
-			
 
 			if (i >= 0 && i <= 5 && this->pointPrime>0) { //regarde si on est dans la partie superieure et si la pime a deja ete prise
 				this->pointPrime -= this->figureActuel[i]->valeur;
@@ -242,18 +261,13 @@ namespace COO {
 	}
 
 	void joueur::jouer(Diff difficulte) {
+		difficulte_local = difficulte;
 		int choix = 0;
 		choixDeRandom cdr;
 		switch (this->typeJ->getType()) {
 		case typeJoueur::humain:
 			this->choisirDeJoueur();
-			if (difficulte == Diff::hardcore)
-			{
-				choix = iaRandom();
-			}
-			else {
-				choix = entrerNumFigure();
-			}
+			choix = entrerNumFigure();
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
@@ -338,9 +352,19 @@ namespace COO {
 				}
 				break;
 			case Diff::hardcore :
-				if (this->figureActuel[numChoixFigure]->vu == false) {
+				if (numChoixFigure == 0)
+				{
 					choixValide = this->validerFigure(numChoixFigure);
-					choixValide = true;
+					tmp.push_back(&numChoixFigure);
+				}
+				else if (tmp.size() == numChoixFigure)
+				{
+					choixValide = this->validerFigure(numChoixFigure);
+					tmp.push_back(&numChoixFigure);
+				}
+				else
+				{
+					std::cout << "Le level est hardcore, il faut suivre l'ordre des figures " << std::endl;
 				}
 				break;
 			default:
