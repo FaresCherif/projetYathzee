@@ -9,6 +9,7 @@ namespace COO {
 		Button(float x,float y,float width,float height,std::string titre, sf::Color);
 		void render(sf::RenderWindow* target);
 		bool clicked(sf::Vector2f mousePos);
+		sf::RectangleShape getRectangle();
 	private:
 		sf::RectangleShape rectangle;
 		sf::Text titre;

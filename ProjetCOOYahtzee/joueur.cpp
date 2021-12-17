@@ -19,9 +19,14 @@
 namespace COO {
 	joueur::joueur(typeJoueur ia)
 	{
+		//instancie les differentes attribut a une valeur par defaut
+		this->SAVEFILE = "";
+		this->nbRelance = 0;
 		this->point = 0; // instancie le nombre de points a 0
+		this->nbFigure = 0;
+		this->nbDe = 0;
 
-		switch (ia)
+		switch (ia) //
 		{
 		case typeJoueur::humain:
 			this->typeJ = new choixDeHumain;
@@ -33,6 +38,7 @@ namespace COO {
 			this->typeJ = new choixDeMax;
 			break;
 		default:
+			this->typeJ = new choixDeHumain;
 			break;
 		}
 
@@ -90,22 +96,40 @@ namespace COO {
 
 	void joueur::afficherWindow(sf::RenderWindow* window, int relance) {
 
+		lancerDe();
 
 		sf::Texture backgroundTexture;
-		sf::Texture premierDeTexture, deuxiemeDeTexture, troisiemeDeTexture, quatriemeDeTexture, cinquiememDeTexture;
 		std::vector < sf::Texture*> deTexture;
+
+		std::vector <Button*> listeBouttonFigure;
+
+		float positionXBoutton = (float)window->getSize().x - 300; // initioalise la position du premiers boutton des figures
+		float positionYButton = 100;
+
+		for (visibiliteFigure* vf : this->figureActuel) { //ajoute les bouttons dans la liste des bouttons de figures
+			std::string nomBoutton;
+			nomBoutton.append(vf->nomFigure);
+			nomBoutton.append(" ");
+			nomBoutton.append(std::to_string(vf->valeur));
+			if (vf->vu) {
+				listeBouttonFigure.push_back(new Button(positionXBoutton, positionYButton, 250, 50, nomBoutton, sf::Color::Blue));
+			}
+			else {
+				listeBouttonFigure.push_back(new Button(positionXBoutton, positionYButton, 250, 50, nomBoutton, sf::Color::Black));
+			}
+			positionYButton += 50;
+		}
+
 		Button relancerDe((float)window->getSize().x / 2 - 200 / 2, (float)window->getSize().y / 2 - 50 / 2, 200, 50, "Relancer De", sf::Color::Black); // place le boutton relance vers le milieu
 
-		deTexture.push_back(&premierDeTexture);
-		deTexture.push_back(&deuxiemeDeTexture);
-		deTexture.push_back(&troisiemeDeTexture);
-		deTexture.push_back(&quatriemeDeTexture);
-		deTexture.push_back(&cinquiememDeTexture);
+		for (int i = 0; i < this->getNbDe(); i++) { // cree une nouvelle texture pour chacun des des
+			deTexture.push_back(new sf::Texture());
+		}
 
-		backgroundTexture.loadFromFile("image/background.jpg");
+		backgroundTexture.loadFromFile("image/background.jpg"); //appelle la texture du background
 
 
-		for (int i = 0; i < this->getNbDe(); i++) {
+		for (int i = 0; i < this->getNbDe();i++) { // applique l'image sur chacun des des selon la face obtenuz
 			std::string s = "image/dice/";
 			auto valDe = std::to_string(this->lancerJoueur.getDes()[i].getValeur());
 			s += valDe;
@@ -119,26 +143,21 @@ namespace COO {
 		sf::Sprite backgroundSprite(backgroundTexture);
 
 
-		sf::Sprite premierDeSprite(premierDeTexture);
-		sf::Sprite deuxiemeDeSprite(deuxiemeDeTexture);
-		sf::Sprite troisiemeDeSprite(troisiemeDeTexture);
-		sf::Sprite quatriemeDeSprite(quatriemeDeTexture);
-		sf::Sprite cinquiemeDeSprite(cinquiememDeTexture);
 
 		std::vector < sf::Sprite*> deSprite;
-		deSprite.push_back(&premierDeSprite);
-		deSprite.push_back(&deuxiemeDeSprite);
-		deSprite.push_back(&troisiemeDeSprite);
-		deSprite.push_back(&quatriemeDeSprite);
-		deSprite.push_back(&cinquiemeDeSprite);
+
+		for (int i = 0; i < this->getNbDe(); i++) { //set texture sur les sprite des des
+			deSprite.push_back(new sf::Sprite(*deTexture.at(i)));
+		}
 
 
 
-		premierDeSprite.setPosition(sf::Vector2f(50, 100));
-		deuxiemeDeSprite.setPosition(sf::Vector2f(premierDeSprite.getPosition().x + premierDeTexture.getSize().x, premierDeSprite.getPosition().y));
-		troisiemeDeSprite.setPosition(sf::Vector2f(deuxiemeDeSprite.getPosition().x + deuxiemeDeTexture.getSize().x, deuxiemeDeSprite.getPosition().y));
-		quatriemeDeSprite.setPosition(sf::Vector2f(troisiemeDeSprite.getPosition().x + troisiemeDeTexture.getSize().x, troisiemeDeSprite.getPosition().y));
-		cinquiemeDeSprite.setPosition(sf::Vector2f(quatriemeDeSprite.getPosition().x + quatriemeDeTexture.getSize().x, quatriemeDeSprite.getPosition().y));
+
+		deSprite.at(0)->setPosition(sf::Vector2f(50, 100));
+		for (int i = 1; i < this->getNbDe(); i++) { //place les des
+			deSprite.at(i)->setPosition(sf::Vector2f(deSprite.at(i-1)->getPosition().x + deTexture.at(i-1)->getSize().x, deSprite.at(i-1)->getPosition().y));
+		}
+
 
 
 		float width = (float)window->getSize().x / backgroundTexture.getSize().x;
@@ -147,19 +166,23 @@ namespace COO {
 		backgroundSprite.scale(width, height); // premet de redimensionner le fond selon la taille de la fenetre
 
 		window->draw(backgroundSprite);
-		window->draw(premierDeSprite);
-		window->draw(deuxiemeDeSprite);
-		window->draw(troisiemeDeSprite);
-		window->draw(quatriemeDeSprite);
-		window->draw(cinquiemeDeSprite);
+		for (int i = 0; i < this->getNbDe(); i++) { //affiche les des
+			window->draw(*deSprite.at(i));
+		}
+
+		for (int i = 0; i < this->getNbFigure();i++) {  //affiche les bouttons des figures
+			listeBouttonFigure.at(i)->render(window);
+
+		}
 
 		if (relance < this->getNbRelance()) {
 			relancerDe.render(window);
 		}
 
-		window->display();
-		while (window->isOpen()) {
+		bool figureChoisis = false;
 
+		window->display();
+		while (window->isOpen() && !figureChoisis) {
 			sf::Event event;
 			while (window->pollEvent(event))
 			{
@@ -167,14 +190,15 @@ namespace COO {
 					window->close();
 				}
 				else if (event.type == sf::Event::MouseButtonPressed) {
-					if (relancerDe.clicked(sf::Vector2f(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) && relance < this->getNbRelance()) {
-						lancerDe();
-						afficherValeur();
+					if (relancerDe.clicked(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) && relance < this->getNbRelance()) {
+						std::cout << "relance" << std::endl;
 						afficherWindow(window, relance + 1);
+						figureChoisis = true;
+
 					}
 					else {
 						for (int i = 0; i < this->getNbDe(); i++) {
-							if (deSprite.at(i)->getGlobalBounds().contains(sf::Mouse::getPosition(*window).x, sf::Mouse::getPosition(*window).y)) {
+							if (deSprite.at(i)->getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>( sf::Mouse::getPosition(*window).y))) {
 								if (!this->lancerJoueur.isGarder(i)) {
 									this->lancerJoueur.garder(i);
 								}
@@ -183,10 +207,23 @@ namespace COO {
 								}
 							}
 						}
+
+						for (int i = 0; i < this->getNbFigure(); i++) {
+							if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) && !this->figureActuel.at(i)->vu) {
+								std::cout << "bouton clicke"<<std::endl;
+								this->choisirFigure(i,joueur::Diff::facile);
+								std::cout << "figure choisis" << std::endl;
+								this->lancerJoueur.aucunGarder();
+								std::cout << "de lache" << std::endl;
+								figureChoisis = true;
+							}
+						}
 					}
 				}
 			}
 		}
+
+
 	}
 
 	void joueur::choisirDeJoueur(sf::RenderWindow* window) {
@@ -203,7 +240,6 @@ namespace COO {
 
 		lancerDe();
 		afficherValeur();
-		afficherWindow(window, relancerDe);
 
 		while (compteurLance < this->getNbRelance() && relancerDe) {
 
@@ -234,7 +270,6 @@ namespace COO {
 
 			if (reponse == "N") {
 				relancerDe = false;
-				afficherWindow(window, relancerDe);
 			}
 			else if (reponse == "1" || reponse == "2" || reponse == "3" || reponse == "4" || reponse == "5") {
 
@@ -250,13 +285,11 @@ namespace COO {
 				lancerDe();
 				afficherValeur();
 				compteurLance++;
-				afficherWindow(window, compteurLance);
 			}
 			else {
 				std::cout << "ERREUR : Charactere non reconnu" << std::endl;
 			}
 		}
-		afficherWindow(window, false);
 
 
 	}
@@ -446,7 +479,12 @@ namespace COO {
 					this->figureActuel.at(i) = nullptr;
 			}
 		}
-
+		else {
+			this->SAVEFILE = "";
+			this->nbRelance = 0;
+			this->nbFigure = 0;
+			this->nbDe = 0;
+		}
 		this->point = j.point;
 		std::cout << this->typeJ << std::endl;
 
@@ -475,21 +513,31 @@ namespace COO {
 		}
 	}
 
-	void joueur::jouer(sf::RenderWindow* window, Diff difficulte) {
+	void joueur::jouer(sf::RenderWindow* window, Diff difficulte,bool ecran) {
 
 		int choix = 0;
 		choixDeRandom cdr;
 
 		switch (this->typeJ->getType()) {
 		case typeJoueur::humain:
-			this->choisirDeJoueur(window);
-			if (difficulte == Diff::hardcore)
-			{
-				choix = iaRandom();
+			if (ecran) {
+				std::cout << "dans joueur avant" << std::endl;
+				this->afficherWindow(window,1);
+				std::cout << "dans joueur apres" << std::endl;
+
 			}
 			else {
-				choix = entrerNumFigure();
+				this->choisirDeJoueur(window);
+				if (difficulte == Diff::hardcore)
+				{
+					choix = iaRandom();
+				}
+				else {
+					choix = entrerNumFigure();
+				}
+
 			}
+
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
@@ -500,20 +548,12 @@ namespace COO {
 			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
 			break;
 		}
+		std::cout << "tour fini" << std::endl;
 
-		if (difficulte == Diff::facile)
-		{
-			this->choisirFigure(choix, Diff::facile);
+		if (!ecran) {
+			this->choisirFigure(choix, difficulte);
 		}
-		else if (difficulte == Diff::moyen) {
-			this->choisirFigure(choix, Diff::moyen);
-		}
-		else if (difficulte == Diff::difficile) {
-			this->choisirFigure(choix, Diff::difficile);
-		}
-		else if (difficulte == Diff::hardcore) {
-			this->choisirFigure(choix, Diff::hardcore);
-		}
+
 	}
 
 	void joueur::choisirFigure(int numChoixFigure, Diff difficulte) {

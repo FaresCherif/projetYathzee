@@ -32,7 +32,7 @@ namespace COO {
 		void afficherChoixFigure();
 		bool isIA();
 		void choisirDeJoueur(sf::RenderWindow*);
-		void jouer(sf::RenderWindow*, Diff);
+		void jouer(sf::RenderWindow*, Diff,bool);
 		void choisirFigure(int, Diff);
 		int getNbFigure();
 		bool validerFigure(int);
