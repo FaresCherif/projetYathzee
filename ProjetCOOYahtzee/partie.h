@@ -16,12 +16,12 @@ namespace COO {
 
 	public:
 		partie(std::vector<joueur*>);
-		void jouer(sf::RenderWindow* window, Diff);
+		void jouer(sf::RenderWindow* window, Diff,bool);
 		void sauvegarder(int);
 		int charger();
 		~partie();
 		partie& operator=(const partie&);
 		partie(const partie&);
-
+		void ecranFinPartie();
 	};
 }

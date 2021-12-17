@@ -37,7 +37,7 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer(sf::RenderWindow* window, Diff difficulte) {
+	void partie::jouer(sf::RenderWindow* window, Diff difficulte,bool ecran) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
 		}
@@ -47,16 +47,16 @@ namespace COO {
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
 				if (difficulte == Diff::facile) {
-					f->jouer(window, joueur::Diff::facile);
+					f->jouer(window, joueur::Diff::facile,ecran);
 				}
 				else if (difficulte == Diff::moyen) {
-					f->jouer(window, joueur::Diff::moyen);
+					f->jouer(window, joueur::Diff::moyen,ecran);
 				}
 				else if (difficulte == Diff::difficile) {
-					f->jouer(window, joueur::Diff::difficile);
+					f->jouer(window, joueur::Diff::difficile,ecran);
 				}
 				else if (difficulte == Diff::hardcore) {
-					f->jouer(window, joueur::Diff::hardcore);
+					f->jouer(window, joueur::Diff::hardcore,ecran);
 				}
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
@@ -70,13 +70,17 @@ namespace COO {
 			}
 		}
 
+		if (ecran) {
+			this->ecranFinPartie();
+		}
+		/*
 		int nbJoueur = 1;
 
 		for (joueur* f : joueurs) {
 			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
 			nbJoueur++;
 		}
-
+		
 		int i = this->charger();
 
 		std::cout << "-----------Chargement--------------\t\t" << std::endl;
@@ -89,22 +93,22 @@ namespace COO {
 				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
 				if (difficulte == Diff::facile) {
-					f->jouer(window, joueur::Diff::facile);
+					f->jouer(window, joueur::Diff::facile,ecran);
 				}
 				else if (difficulte == Diff::moyen) {
-					f->jouer(window, joueur::Diff::moyen);
+					f->jouer(window, joueur::Diff::moyen,ecran);
 				}
 				else if (difficulte == Diff::difficile) {
-					f->jouer(window, joueur::Diff::difficile);
+					f->jouer(window, joueur::Diff::difficile,ecran);
 				}
 				else if (difficulte == Diff::hardcore) {
-					f->jouer(window, joueur::Diff::hardcore);
+					f->jouer(window, joueur::Diff::hardcore,ecran);
 				}
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
 			}
-		}
+		}*/
 	}
 	void partie::sauvegarder(int i) //creer notre propre fichier de sauvegarde
 	{
@@ -123,7 +127,7 @@ namespace COO {
 	{
 		joueurs.clear();
 		std::ifstream fichier(this->SAVE);
-		int numTour;
+		int numTour=0;
 
 		if (fichier)
 		{
@@ -257,6 +261,11 @@ namespace COO {
 			else
 				this->figureJoueur.push_back(nullptr);
 		}
+	}
+
+	void partie::ecranFinPartie()
+	{
+
 	}
 
 

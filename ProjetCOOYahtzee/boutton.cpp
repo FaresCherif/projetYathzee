@@ -45,4 +45,8 @@ namespace COO {
 		return false;
 
 	}
+	sf::RectangleShape Button::getRectangle()
+	{
+		return this->rectangle;
+	}
 }

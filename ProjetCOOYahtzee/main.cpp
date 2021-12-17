@@ -14,15 +14,15 @@
 
 using namespace COO;
 int main() {
-	//joueur j1(typeJoueur::humain);
-	joueur j2(typeJoueur::humain);
+	joueur j1(typeJoueur::humain);
+	//joueur j2(typeJoueur::humain);
 	//joueur j3(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;
 	std::vector<joueur*> vecVide;
 
-	//vecJoueurs.push_back(&j1);
-	vecJoueurs.push_back(&j2);
+	vecJoueurs.push_back(&j1);
+	//vecJoueurs.push_back(&j2);
 	//vecJoueurs.push_back(&j3);
 
 	//joueur j4(j3);
@@ -40,35 +40,14 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(1500, 800, 32), "YAHTZEE");
 	window.clear(sf::Color(0, 255, 0));
 	sf::Texture backgroundTexture;
-	sf::Texture premierDeTexture,deuxiemeDeTexture,troisiemeDeTexture,quatriemeDeTexture,cinquiememDeTexture;
 
 
 	backgroundTexture.loadFromFile("image/background.jpg");
 	//just to back up
 	
-	premierDeTexture.loadFromFile("image/dice/1.png");
-	deuxiemeDeTexture.loadFromFile("image/dice/1.png");
-	troisiemeDeTexture.loadFromFile("image/dice/1.png");
-	quatriemeDeTexture.loadFromFile("image/dice/1.png");
-	cinquiememDeTexture.loadFromFile("image/dice/1.png");
-	
 
 	sf::Sprite backgroundSprite(backgroundTexture);
 
-	
-	sf::Sprite premierDeSprite(premierDeTexture);
-	sf::Sprite deuxiemeDeSprite(deuxiemeDeTexture);
-	sf::Sprite troisiemeDeSprite(troisiemeDeTexture);
-	sf::Sprite quatriemeDeSprite(quatriemeDeTexture);
-	sf::Sprite cinquiemeDeSprite(cinquiememDeTexture);
-	
-	
-	premierDeSprite.setPosition(sf::Vector2f(50, 100));
-	deuxiemeDeSprite.setPosition(sf::Vector2f(premierDeSprite.getPosition().x+premierDeTexture.getSize().x, premierDeSprite.getPosition().y));
-	troisiemeDeSprite.setPosition(sf::Vector2f(deuxiemeDeSprite.getPosition().x + deuxiemeDeTexture.getSize().x, deuxiemeDeSprite.getPosition().y));
-	quatriemeDeSprite.setPosition(sf::Vector2f(troisiemeDeSprite.getPosition().x + troisiemeDeTexture.getSize().x, troisiemeDeSprite.getPosition().y));
-	cinquiemeDeSprite.setPosition(sf::Vector2f(quatriemeDeSprite.getPosition().x + quatriemeDeTexture.getSize().x, quatriemeDeSprite.getPosition().y));
-	
 
 	float width = (float)window.getSize().x / backgroundTexture.getSize().x;
 	float height = (float)window.getSize().y / backgroundTexture.getSize().y;
@@ -100,25 +79,12 @@ int main() {
 				partieEnCours = lancerPartie.clicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
 
 				if (partieEnCours == true) {
-					window.draw(backgroundSprite);
-					window.draw(premierDeSprite);
-					window.draw(deuxiemeDeSprite);
-					window.draw(troisiemeDeSprite);
-					window.draw(quatriemeDeSprite);
-					window.draw(cinquiemeDeSprite);
+
 
 					window.display();
-					p.jouer(&window,Diff::facile);
+					p.jouer(&window,Diff::facile,true);
 
 				}
-			}
-			else if (event.type == sf::Event::Resized) {
-				float width = (float)window.getSize().x / backgroundTexture.getSize().x;
-				float height = (float)window.getSize().y / backgroundTexture.getSize().y;
-				sf::Sprite backgroundSprite(backgroundTexture);
-				backgroundSprite.scale(width, height);
-				window.draw(backgroundSprite);
-				window.display();
 			}
 		}
 	}
