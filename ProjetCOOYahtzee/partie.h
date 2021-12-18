@@ -22,6 +22,6 @@ namespace COO {
 		~partie();
 		partie& operator=(const partie&);
 		partie(const partie&);
-		void ecranFinPartie();
+		void ecranFinPartie(sf::RenderWindow* window);
 	};
 }

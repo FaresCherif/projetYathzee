@@ -45,7 +45,7 @@ namespace COO {
 		for (int i = 0; i < this->nbFigure; i++) {
 			int nbJoueur = 1;
 			for (joueur* f : joueurs) {
-				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 				if (difficulte == Diff::facile) {
 					f->jouer(window, joueur::Diff::facile,ecran);
 				}
@@ -58,7 +58,7 @@ namespace COO {
 				else if (difficulte == Diff::hardcore) {
 					f->jouer(window, joueur::Diff::hardcore,ecran);
 				}
-				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
+				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
 			}
@@ -70,15 +70,13 @@ namespace COO {
 			}
 		}
 
-		if (ecran) {
-			this->ecranFinPartie();
-		}
-		/*
-		int nbJoueur = 1;
+
+
+		
+		
 
 		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points " << std::endl;
-			nbJoueur++;
+			std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points " << std::endl;
 		}
 		
 		int i = this->charger();
@@ -88,10 +86,9 @@ namespace COO {
 		std::cout << "joueur : " << joueurs.size() << std::endl;;
 		for (i; i < this->nbFigure; i++) {
 
-			int nbJoueur = 1;
 			for (joueur* f : joueurs) {
 				std::cout << f->getNbFigure() << " " << f->getFigure().size();
-				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
+				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 				if (difficulte == Diff::facile) {
 					f->jouer(window, joueur::Diff::facile,ecran);
 				}
@@ -104,11 +101,20 @@ namespace COO {
 				else if (difficulte == Diff::hardcore) {
 					f->jouer(window, joueur::Diff::hardcore,ecran);
 				}
-				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
+				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
-				nbJoueur++;
 			}
-		}*/
+		}
+
+		if (ecran) {
+			this->ecranFinPartie(window);
+		}
+		else {
+			for (joueur* f : joueurs) {
+				std::cout << "Le score final du joueur " << f->nom << " est de " << f->getScore() << std::endl;
+				window->close();
+			}
+		}
 	}
 	void partie::sauvegarder(int i) //creer notre propre fichier de sauvegarde
 	{
@@ -137,26 +143,32 @@ namespace COO {
 			int numIA;
 			int pt;
 			int ptPrime;
-
+			std::string nom;
 			std::vector<visibiliteFigure*> figureJCharger;
 
 			while (getline(fichier, ligne))
 			{
 				try {
-					int numSave = (stoi(ligne));
-					//std::cout << ligne << std::endl;
-
+					std::cout << cpt << std::endl;
 					if (cpt == -1) {
+						int numSave = (stoi(ligne));
 						numTour = numSave;
 					}
 					else if (cpt % 17 == 0) {
+						int numSave = (stoi(ligne));
 						numIA = numSave;
 					}
 					else if (cpt % 17 == 1) {
+						int numSave = (stoi(ligne));
 						pt = numSave;
 					}
 					else if (cpt % 17 == 2) {
+						int numSave = (stoi(ligne));
 						ptPrime = numSave;
+					}
+					else if (cpt % 17 == 3) {
+						std::cout << "nom  "<< ligne << std::endl;
+						nom = ligne;
 					}
 					else {
 
@@ -175,6 +187,7 @@ namespace COO {
 
 
 					}
+					cpt++;
 
 
 				}
@@ -200,11 +213,10 @@ namespace COO {
 						std::cout << figureJCharger.at(i)->getNom()<<std::endl;
 					}
 					*/
-					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE);
+					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE,nom);
 					joueurs.push_back(j);
 					figureJCharger.clear();
 				}
-				cpt++;
 			}
 		}
 		else
@@ -263,9 +275,51 @@ namespace COO {
 		}
 	}
 
-	void partie::ecranFinPartie()
+	void partie::ecranFinPartie(sf::RenderWindow* window)
 	{
+		std::cout << "boucle fini" << std::endl;
 
+		sf::Texture backgroundTexture;
+		backgroundTexture.loadFromFile("image/background.jpg"); //appelle la texture du background
+
+		sf::Sprite backgroundSprite(backgroundTexture);
+
+		float width = (float)window->getSize().x / backgroundTexture.getSize().x;
+		float height = (float)window->getSize().y / backgroundTexture.getSize().y;
+
+		backgroundSprite.scale(width, height); // premet de redimensionner le fond selon la taille de la fenetre
+
+
+
+		sf::Text text;
+		sf::Font font;
+		std::vector <sf::Text*> listeTextFinalJoueur;
+
+
+		font.loadFromFile("font/arial.ttf");
+		std::string fin;
+		float positionXBoutton = (float)window->getSize().x /2 ; // initioalise la position du premiers boutton des figures
+		float positionYButton = 0;
+
+		for (joueur* f : joueurs) {
+			fin="Le score final du joueur " + f->nom + " est de ";
+			fin.append(std::to_string(f->getScore()));
+			text.setString(fin);
+			text.setFont(font);
+			listeTextFinalJoueur.push_back(new sf::Text(text));
+		}
+
+		window->draw(backgroundSprite);
+
+		for (sf::Text* t : listeTextFinalJoueur) {
+			t->setPosition(sf::Vector2f(positionXBoutton, positionYButton));
+			positionYButton += 50;
+			std::cout << t->getString().toAnsiString() << std::endl;
+			window->draw(*t);
+		}
+
+
+		window->display();
 	}
 
 

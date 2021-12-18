@@ -14,15 +14,15 @@
 
 using namespace COO;
 int main() {
-	joueur j1(typeJoueur::humain);
-	//joueur j2(typeJoueur::humain);
+	joueur j1(typeJoueur::humain,"harold");
+	joueur j2(typeJoueur::iaMax,"lisa");
 	//joueur j3(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;
 	std::vector<joueur*> vecVide;
 
 	vecJoueurs.push_back(&j1);
-	//vecJoueurs.push_back(&j2);
+	vecJoueurs.push_back(&j2);
 	//vecJoueurs.push_back(&j3);
 
 	//joueur j4(j3);
@@ -55,9 +55,7 @@ int main() {
 	backgroundSprite.scale(width, height);
 
 	window.draw(backgroundSprite);
-	/*
 
-	*/
 	Button lancerPartie((float)window.getSize().x/2 -200/2, (float)window.getSize().y/2 -50/2,200,50,"Lancer partie",sf::Color::Blue);
 
 	
