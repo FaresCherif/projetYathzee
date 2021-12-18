@@ -74,16 +74,15 @@ namespace COO {
 		for (joueur* f : joueurs) {
 			std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points " << std::endl;
 		}
-		
+		/*
 		int i = this->charger();
-
+		
 		std::cout << "-----------Chargement--------------\t\t" << std::endl;
 
 		std::cout << "joueur : " << joueurs.size() << std::endl;;
 		for (i; i < this->nbFigure; i++) {
 
 			for (joueur* f : joueurs) {
-				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 
 				f->jouer(window,ecran);
@@ -92,6 +91,7 @@ namespace COO {
 
 			}
 		}
+		*/
 
 		if (ecran) {
 			this->ecranFinPartie(window);
@@ -130,6 +130,7 @@ namespace COO {
 			int numIA;
 			int pt;
 			int ptPrime;
+			int difficulte;
 			std::string nom;
 			std::vector<visibiliteFigure*> figureJCharger;
 
@@ -141,21 +142,24 @@ namespace COO {
 						int numSave = (stoi(ligne));
 						numTour = numSave;
 					}
-					else if (cpt % 17 == 0) {
+					else if (cpt % 18 == 0) {
 						int numSave = (stoi(ligne));
 						numIA = numSave;
 					}
-					else if (cpt % 17 == 1) {
+					else if (cpt % 18 == 1) {
 						int numSave = (stoi(ligne));
 						pt = numSave;
 					}
-					else if (cpt % 17 == 2) {
+					else if (cpt % 18 == 2) {
 						int numSave = (stoi(ligne));
 						ptPrime = numSave;
 					}
-					else if (cpt % 17 == 3) {
-						std::cout << "nom  "<< ligne << std::endl;
+					else if (cpt % 18 == 3) {
 						nom = ligne;
+					}
+					else if (cpt % 18 == 4) {
+						int numSave = (stoi(ligne));
+						difficulte = numSave;
 					}
 					else {
 
@@ -200,7 +204,7 @@ namespace COO {
 						std::cout << figureJCharger.at(i)->getNom()<<std::endl;
 					}
 					*/
-					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE,nom);
+					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE,nom,difficulte);
 					joueurs.push_back(j);
 					figureJCharger.clear();
 				}
