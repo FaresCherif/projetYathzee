@@ -289,7 +289,36 @@ namespace COO {
 
 		backgroundSprite.scale(width, height); // premet de redimensionner le fond selon la taille de la fenetre
 
+
+
+		sf::Text text;
+		sf::Font font;
+		std::vector <sf::Text*> listeTextFinalJoueur;
+
+
+		font.loadFromFile("font/arial.ttf");
+		std::string fin;
+		float positionXBoutton = (float)window->getSize().x /2 ; // initioalise la position du premiers boutton des figures
+		float positionYButton = 0;
+
+		for (joueur* f : joueurs) {
+			fin="Le score final du joueur " + f->nom + " est de ";
+			fin.append(std::to_string(f->getScore()));
+			text.setString(fin);
+			text.setFont(font);
+			listeTextFinalJoueur.push_back(new sf::Text(text));
+		}
+
 		window->draw(backgroundSprite);
+
+		for (sf::Text* t : listeTextFinalJoueur) {
+			t->setPosition(sf::Vector2f(positionXBoutton, positionYButton));
+			positionYButton += 50;
+			std::cout << t->getString().toAnsiString() << std::endl;
+			window->draw(*t);
+		}
+
+
 		window->display();
 	}
 

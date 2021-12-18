@@ -104,6 +104,14 @@ namespace COO {
 
 		std::vector <Button*> listeBouttonFigure;
 
+		sf::Text text;
+		text.setString(this->nom+ " : "+ std::to_string(this->getScore()));
+
+		sf::Font font;
+		font.loadFromFile("font/arial.ttf");
+		text.setFont(font);
+
+
 		float positionXBoutton = (float)window->getSize().x - 300; // initioalise la position du premiers boutton des figures
 		float positionYButton = 100;
 
@@ -179,6 +187,7 @@ namespace COO {
 		if (relance < this->getNbRelance()) {
 			relancerDe.render(window);
 		}
+		window->draw(text);
 
 		bool figureChoisis = false;
 
@@ -552,7 +561,7 @@ namespace COO {
 		}
 		std::cout << "tour fini" << std::endl;
 
-		if (!ecran) {
+		if (!ecran || this->isIA()) {
 			this->choisirFigure(choix, difficulte);
 		}
 
