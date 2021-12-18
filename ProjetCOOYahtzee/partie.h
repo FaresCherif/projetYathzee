@@ -6,7 +6,7 @@
 namespace COO {
 	class partie {
 	private:
-		enum class Diff { facile, moyen , difficile , hardcore};
+		enum class Diff { facile, moyen, difficile, hardcore };
 		std::vector<joueur*> joueurs;
 		const int nbFigure = 13;
 		const int nbDe = 5;
