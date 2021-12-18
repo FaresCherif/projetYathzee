@@ -48,6 +48,7 @@ int main() {
 
 	sf::Sprite backgroundSprite(backgroundTexture);
 
+	int difficulte = 1;
 
 	float width = (float)window.getSize().x / backgroundTexture.getSize().x;
 	float height = (float)window.getSize().y / backgroundTexture.getSize().y;
@@ -56,15 +57,35 @@ int main() {
 
 	window.draw(backgroundSprite);
 
-	Button lancerPartie((float)window.getSize().x/2 -200/2, (float)window.getSize().y/2 -50/2,200,50,"Lancer partie",sf::Color::Blue);
+	Button lancerPartieImage((float)window.getSize().x/2 -200/2, (float)window.getSize().y/2 -50/2,400,50,"Lancer partie en visuel",sf::Color(209,45,54));
+	Button lancerPartieTerminal((float)window.getSize().x / 2 - 200 / 2, (float)window.getSize().y / 2 +100 / 2, 400, 50, "Lancer partie en terminal", sf::Color::Blue);
 
-	
-	lancerPartie.render(&window);
+	Button facile((float)window.getSize().x / 4.f , 0.f +20.f, 150, 50, "facile", sf::Color(100, 100, 50));
+	Button moyen((float)window.getSize().x / 4.f + 200.f , 0.f + 20.f, 150, 50, "moyen", sf::Color(100, 100, 50));
+	Button difficile((float)window.getSize().x /4.f +400.f, 0.f + 20.f, 150, 50, "difficile", sf::Color(100, 100, 50));
+	Button hardcore((float)window.getSize().x / 4.f +600.f, 0.f + 20.f, 150, 50, "hardcore", sf::Color(100, 100, 50));
 
+	std::vector <Button> listeBouttonDifficulte;
+	listeBouttonDifficulte.push_back(facile);
+	listeBouttonDifficulte.push_back(moyen);
+	listeBouttonDifficulte.push_back(difficile);
+	listeBouttonDifficulte.push_back(hardcore);
+
+
+	for (Button buton : listeBouttonDifficulte) {
+		buton.render(&window);
+	}
+
+
+	lancerPartieImage.render(&window);
+	lancerPartieTerminal.render(&window);
 
 
 	window.display();
-	bool partieEnCours = false;
+	bool partieEnCoursVisuel = false;
+	bool partieEnCoursTerminal = false;
+
+
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -74,16 +95,29 @@ int main() {
 				window.close();
 			}
 			else if (event.type == sf::Event::MouseButtonPressed) {
-				partieEnCours = lancerPartie.clicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
+				partieEnCoursVisuel = lancerPartieImage.clicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
+				partieEnCoursTerminal = lancerPartieTerminal.clicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y));
 
-				if (partieEnCours == true) {
-
-
-					window.display();
-					p.jouer(&window,3,false);
+				if (partieEnCoursVisuel == true) {
+					p.jouer(&window,difficulte,true);
+				}
+				else if (partieEnCoursTerminal == true) {
+					window.close();
+					p.jouer(&window, difficulte, false);
+				}
+				else {
+					int click = -1;
+					for (int i = 0; i < listeBouttonDifficulte.size();i++) {
+						if(listeBouttonDifficulte.at(i).clicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+						{
+							difficulte = i+1;
+							click = i;
+						}
+					}
 
 				}
 			}
+
 		}
 	}
 

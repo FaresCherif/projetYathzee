@@ -113,6 +113,7 @@ namespace COO {
 	}
 
 	void joueur::afficherChoixFigure() {
+		
 		std::cout << "Que voulez-vous prende ?" << std::endl << std::endl;
 		if (this->difficulte == 1) {
 			for (int i = 0; i < this->getNbFigure(); i++) {
@@ -178,6 +179,7 @@ namespace COO {
 		float positionXBoutton = (float)window->getSize().x - 300; // initioalise la position du premiers boutton des figures
 		float positionYButton = 100;
 
+
 		for (visibiliteFigure* vf : this->figureActuel) { //ajoute les bouttons dans la liste des bouttons de figures
 			std::string nomBoutton;
 			nomBoutton.append(vf->nomFigure);
@@ -242,10 +244,50 @@ namespace COO {
 			window->draw(*deSprite.at(i));
 		}
 
-		for (int i = 0; i < this->getNbFigure();i++) {  //affiche les bouttons des figures
-			listeBouttonFigure.at(i)->render(window);
 
+
+
+
+
+
+
+
+		if (this->difficulte == 1) {
+			for (int i = 0; i < this->getNbFigure(); i++) {  //affiche les bouttons des figures
+				listeBouttonFigure.at(i)->render(window);
+			}
 		}
+		else if (difficulte == 2) {
+			if (this->figureActuel[0]->getFigureVu() == true &&
+				this->figureActuel[1]->getFigureVu() == true &&
+				this->figureActuel[2]->getFigureVu() == true &&
+				this->figureActuel[3]->getFigureVu() == true &&
+				this->figureActuel[4]->getFigureVu() == true &&
+				this->figureActuel[5]->getFigureVu() == true) {
+				for (int i = 0; i < this->getNbFigure(); i++) {
+					listeBouttonFigure.at(i)->render(window);	
+				}
+			}
+			else {
+				for (int i = 0; i < 6; i++) {
+					listeBouttonFigure.at(i)->render(window);	
+				}
+			}
+		}
+		else if (this->difficulte == 3 || difficulte == 4) {
+			int i = 0;
+			while (this->figureActuel[i]->vu == true) {
+				listeBouttonFigure.at(i)->render(window);
+				i++;
+			}
+			listeBouttonFigure.at(i)->render(window);
+		}
+
+
+
+
+
+
 
 		if (relance < this->getNbRelance()) {
 			relancerDe.render(window);
@@ -271,7 +313,7 @@ namespace COO {
 					}
 					else {
 						for (int i = 0; i < this->getNbDe(); i++) {
-							if (deSprite.at(i)->getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>( sf::Mouse::getPosition(*window).y))) {
+							if ( deSprite.at(i)->getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>( sf::Mouse::getPosition(*window).y))) {
 								if (!this->lancerJoueur.isGarder(i)) {
 									this->lancerJoueur.garder(i);
 								}
@@ -282,13 +324,49 @@ namespace COO {
 						}
 
 						for (int i = 0; i < this->getNbFigure(); i++) {
-							if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) && !this->figureActuel.at(i)->vu) {
-								std::cout << "bouton clicke"<<std::endl;
-								this->choisirFigure(i);
-								std::cout << "figure choisis" << std::endl;
-								this->lancerJoueur.aucunGarder();
-								std::cout << "de lache" << std::endl;
-								figureChoisis = true;
+							if (!this->figureActuel.at(i)->vu) {
+								if (difficulte == 1) {
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) {
+										this->choisirFigure(i);
+										this->lancerJoueur.aucunGarder();
+										figureChoisis = true;
+									}
+								}
+
+								else if (difficulte == 2) {
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) {
+										if (i > 5) {
+											if (this->figureActuel[0]->getFigureVu() == true &&
+												this->figureActuel[1]->getFigureVu() == true &&
+												this->figureActuel[2]->getFigureVu() == true &&
+												this->figureActuel[3]->getFigureVu() == true &&
+												this->figureActuel[4]->getFigureVu() == true &&
+												this->figureActuel[5]->getFigureVu() == true) {
+
+												this->choisirFigure(i);
+												this->lancerJoueur.aucunGarder();
+												figureChoisis = true;
+											}
+										}
+										else {
+											this->choisirFigure(i);
+											this->lancerJoueur.aucunGarder();
+											figureChoisis = true;
+										}
+									}
+								}
+								else if (this->difficulte == 3 || difficulte == 4) {
+									int i = 0;
+									while (this->figureActuel[i]->vu == true) {
+										listeBouttonFigure.at(i)->render(window);
+										i++;
+									}
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) ){
+										this->choisirFigure(i);
+										this->lancerJoueur.aucunGarder();
+										figureChoisis = true;
+									}
+								}
 							}
 						}
 					}
@@ -462,6 +540,8 @@ namespace COO {
 		myfile << this->point << std::endl;
 		myfile << this->pointPrime << std::endl;
 		myfile << this->nom << std::endl;
+		myfile << this->difficulte<< std::endl;
+
 		for (int i = 0; i < this->getNbFigure(); i++) {
 			myfile << this->figureActuel[i]->vu << " " << this->figureActuel[i]->valeur << " " << i << std::endl;
 		}
@@ -469,10 +549,11 @@ namespace COO {
 		myfile.close();
 	}
 
-	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string nom) {
+	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string nom,int difficulte) {
 		this->point = pt;
 		this->nom = nom;
 		this->pointPrime = ptPrime;
+		this->difficulte = difficulte;
 		this->setPartieJoueur(nbD, nbReroll, nbFig, visibFig, SAVE);
 		return this;
 	}
@@ -626,6 +707,7 @@ namespace COO {
 
 	void joueur::choisirFigure(int numChoixFigure) {
 		
+		std::cout << "choix : "<< numChoixFigure<< " difficulte : "<<this->difficulte << std::endl;
 
 
 		bool choixValide = false;
