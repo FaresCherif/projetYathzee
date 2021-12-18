@@ -80,7 +80,7 @@ int main() {
 
 
 					window.display();
-					p.jouer(&window,4,false);
+					p.jouer(&window,3,false);
 
 				}
 			}

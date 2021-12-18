@@ -669,12 +669,17 @@ namespace COO {
 
 			case 3:
 			case 4:
+
 				if (numChoixFigure >= 0 && numChoixFigure < this->getNbFigure())
 				{
-					if (numChoixFigure == 0 || tmp.size() == numChoixFigure)
+					int i = 0;
+					while (this->figureActuel[i]->vu == true) {
+						i++;
+					}
+
+					if (numChoixFigure == i)
 					{
 						choixValide = this->validerFigure(numChoixFigure);
-						tmp.push_back(&numChoixFigure);
 					}
 					else
 					{

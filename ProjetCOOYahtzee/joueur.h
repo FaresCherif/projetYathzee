@@ -16,7 +16,6 @@ namespace COO {
 		const int* nbDe;
 		const int* nbRelance;
 		const int* nbFigure;
-		std::list<int*> tmp;
 		lancer lancerJoueur;
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe* typeJ;
