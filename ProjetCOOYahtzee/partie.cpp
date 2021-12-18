@@ -40,6 +40,11 @@ namespace COO {
 	void partie::jouer(sf::RenderWindow* window, int difficulte,bool ecran) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
+			j->setDifficulte(difficulte);
+
+			if (difficulte == 4) {
+				j->randomiserOrdreFigure();
+			}
 		}
 
 		for (int i = 0; i < this->nbFigure; i++) {
@@ -47,7 +52,7 @@ namespace COO {
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 				
-				f->jouer(window, difficulte,ecran);
+				f->jouer(window,ecran);
 
 				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
@@ -81,7 +86,7 @@ namespace COO {
 				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 
-				f->jouer(window, difficulte,ecran);
+				f->jouer(window,ecran);
 				
 				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 

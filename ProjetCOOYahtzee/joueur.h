@@ -22,27 +22,23 @@ namespace COO {
 		strategyDe* typeJ;
 		const char* SAVEFILE;
 		std::string nom;
+		int difficulte;
 
 		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public:
 		joueur(typeJoueur,std::string nom=" ");
-		int getScore();
 		void lancerDe();
 		void afficherValeur();
 		void afficherChoixIa(int i);
 		void afficherChoixFigure();
-		bool isIA();
 		void choisirDeJoueur(sf::RenderWindow*);
-		void jouer(sf::RenderWindow*, int,bool);
-		void choisirFigure(int, int);
-		int getNbFigure();
+		void jouer(sf::RenderWindow*,bool);
+		void choisirFigure(int);
 		bool validerFigure(int);
 		int entrerNumFigure();
 		void setPartieJoueur(const int*, const int*, const int*, std::vector<visibiliteFigure*>, const char*);
 		void sauvegarderJoueur();
-		strategyDe* getTypeJ();
-		int getNbDe();
-		int getNbRelance();
+
 		std::vector<visibiliteFigure*> getFigure();
 		joueur* charger(int, int, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string);
 		~joueur();
@@ -51,5 +47,18 @@ namespace COO {
 		void setFigureNouvellePartie();
 		void afficherWindow(sf::RenderWindow*, int);
 		int iaRandom();
+		void randomiserOrdreFigure();
+
+
+
+		bool isIA();
+		int getScore();
+		int getNbFigure();
+		int getNbDe();
+		int getNbRelance();
+		strategyDe* getTypeJ();
+
+		void setDifficulte(int);
+
 	};
 }
