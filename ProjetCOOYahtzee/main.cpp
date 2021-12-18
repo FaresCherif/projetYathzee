@@ -14,8 +14,8 @@
 
 using namespace COO;
 int main() {
-	joueur j1(typeJoueur::humain);
-	//joueur j2(typeJoueur::humain);
+	joueur j1(typeJoueur::iaMax,"paul");
+	//joueur j2(typeJoueur::iaMax);
 	//joueur j3(typeJoueur::iaMax);
 
 	std::vector<joueur*> vecJoueurs;

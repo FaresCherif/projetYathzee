@@ -17,7 +17,7 @@
 #include "boutton.h"
 
 namespace COO {
-	joueur::joueur(typeJoueur ia)
+	joueur::joueur(typeJoueur ia,std::string n)
 	{
 		//instancie les differentes attribut a une valeur par defaut
 		this->SAVEFILE = "";
@@ -25,6 +25,7 @@ namespace COO {
 		this->point = 0; // instancie le nombre de points a 0
 		this->nbFigure = 0;
 		this->nbDe = 0;
+		this->nom = n;
 
 		switch (ia) //
 		{
@@ -386,7 +387,7 @@ namespace COO {
 		}
 		myfile << this->point << std::endl;
 		myfile << this->pointPrime << std::endl;
-
+		myfile << this->nom << std::endl;
 		for (int i = 0; i < this->getNbFigure(); i++) {
 			myfile << this->figureActuel[i]->vu << " " << this->figureActuel[i]->valeur << " " << i << std::endl;
 		}
@@ -394,8 +395,9 @@ namespace COO {
 		myfile.close();
 	}
 
-	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE) {
+	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string nom) {
 		this->point = pt;
+		this->nom = nom;
 		this->pointPrime = ptPrime;
 		this->setPartieJoueur(nbD, nbReroll, nbFig, visibFig, SAVE);
 		return this;

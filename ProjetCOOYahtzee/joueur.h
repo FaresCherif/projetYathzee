@@ -21,10 +21,12 @@ namespace COO {
 		std::vector<visibiliteFigure*> figureActuel;
 		strategyDe* typeJ;
 		const char* SAVEFILE;
+		std::string nom;
+
 		enum class Diff { facile, moyen, difficile, hardcore };
 		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public:
-		joueur(typeJoueur);
+		joueur(typeJoueur,std::string nom=" ");
 		int getScore();
 		void lancerDe();
 		void afficherValeur();
@@ -43,7 +45,7 @@ namespace COO {
 		int getNbDe();
 		int getNbRelance();
 		std::vector<visibiliteFigure*> getFigure();
-		joueur* charger(int, int, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE);
+		joueur* charger(int, int, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string);
 		~joueur();
 		joueur& operator=(const joueur&);
 		joueur(const joueur&);
