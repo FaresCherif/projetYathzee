@@ -59,11 +59,33 @@ namespace COO {
 	}
 
 	void joueur::afficherValeur() {
-		for (int i = 0; i < this->getNbFigure(); i++) {
-			if (this->figureActuel[i]->vu == false) {
-				std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+		if (difficulte_local == Diff::hardcore)
+		{
+			if (set)
+			{
+				srand(time(NULL));
+				for (int i = 0; i < this->getNbFigure(); i++) {
+					int nbAleatoire = i + std::rand() % (this->getNbFigure() - i);
+					std::swap(figureActuel[i], figureActuel[nbAleatoire]);
+				}
+				set = false;
+			}
+			for (int i = 0; i < this->getNbFigure(); i++) {
+				if (this->figureActuel[i]->vu == false) {
+					std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+				}
+			}
+
+		}
+		else
+		{
+			for (int i = 0; i < this->getNbFigure(); i++) {
+				if (this->figureActuel[i]->vu == false) {
+					std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+				}
 			}
 		}
+	
 
 	}
 
@@ -477,12 +499,7 @@ namespace COO {
 		case typeJoueur::humain:
 			this->choisirDeJoueur(window);
 			if (difficulte == Diff::hardcore)
-			{
-				choix = iaRandom();
-			}
-			else {
-				choix = entrerNumFigure();
-			}
+			choix = entrerNumFigure();
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
@@ -567,9 +584,19 @@ namespace COO {
 				}
 				break;
 			case Diff::hardcore:
-				if (this->figureActuel[numChoixFigure]->vu == false) {
+				if (numChoixFigure == 0)
+				{
 					choixValide = this->validerFigure(numChoixFigure);
-					choixValide = true;
+					tmp.push_back(&numChoixFigure);
+				}
+				else if (tmp.size() == numChoixFigure)
+				{
+					choixValide = this->validerFigure(numChoixFigure);
+					tmp.push_back(&numChoixFigure);
+				}
+				else
+				{
+					std::cout << "Le level est hardcore, il faut suivre l'ordre des figures " << std::endl;
 				}
 				break;
 			default:

@@ -37,7 +37,7 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer(sf::RenderWindow* window, joueur::Diff difficulte) {
+	void partie::jouer(sf::RenderWindow* window, Diff difficulte) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
 		}
@@ -46,7 +46,18 @@ namespace COO {
 			int nbJoueur = 1;
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-				f->jouer(window, difficulte);
+				if (difficulte == Diff::facile) {
+					f->jouer(window,joueur::Diff::facile);
+				}
+				else if (difficulte == Diff::moyen) {
+					f->jouer(window,joueur::Diff::moyen);
+				}
+				else if (difficulte == Diff::difficile) {
+					f->jouer(window,joueur::Diff::difficile);
+				}
+				else if (difficulte == Diff::hardcore) {
+					f->jouer(window,joueur::Diff::hardcore);
+				}
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
@@ -77,13 +88,25 @@ namespace COO {
 			for (joueur* f : joueurs) {
 				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << nbJoueur << " a " << f->getScore() << " points" << std::endl;
-				f->jouer(window, difficulte);
+				if (difficulte == Diff::facile) {
+					f->jouer(window, joueur::Diff::facile);
+				}
+				else if (difficulte == Diff::moyen) {
+					f->jouer(window, joueur::Diff::moyen);
+				}
+				else if (difficulte == Diff::difficile) {
+					f->jouer(window, joueur::Diff::difficile);
+				}
+				else if (difficulte == Diff::hardcore) {
+					f->jouer(window, joueur::Diff::hardcore);
+				}
 				std::cout << "Le joueur " << nbJoueur << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
 			}
 		}
 	}
+	
 	void partie::sauvegarder(int i) //creer notre propre fichier de sauvegarde
 	{
 		std::ofstream myfile;
@@ -97,6 +120,7 @@ namespace COO {
 		myfile.close();
 
 	}
+
 	int partie::charger()
 	{
 		joueurs.clear();
@@ -238,6 +262,6 @@ namespace COO {
 	}
 
 
-	// just to backup
+	
 
 }

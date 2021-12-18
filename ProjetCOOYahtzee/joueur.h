@@ -13,6 +13,7 @@ namespace COO {
 	private:
 		int point;
 		int pointPrime = 63;
+		bool set = true;
 		const int* nbDe;
 		const int* nbRelance;
 		const int* nbFigure;
@@ -22,6 +23,7 @@ namespace COO {
 		strategyDe* typeJ;
 		const char* SAVEFILE;
 		enum class Diff { facile, moyen, difficile, hardcore };
+		Diff difficulte_local = Diff::facile; // facile par defaut
 		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public:
 		joueur(typeJoueur);
