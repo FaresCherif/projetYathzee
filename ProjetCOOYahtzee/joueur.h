@@ -23,7 +23,6 @@ namespace COO {
 		const char* SAVEFILE;
 		std::string nom;
 
-		enum class Diff { facile, moyen, difficile, hardcore };
 		friend class partie; // pour avoir acces à l'enum Diff de cette classe dans la classe partie 
 	public:
 		joueur(typeJoueur,std::string nom=" ");
@@ -34,8 +33,8 @@ namespace COO {
 		void afficherChoixFigure();
 		bool isIA();
 		void choisirDeJoueur(sf::RenderWindow*);
-		void jouer(sf::RenderWindow*, Diff,bool);
-		void choisirFigure(int, Diff);
+		void jouer(sf::RenderWindow*, int,bool);
+		void choisirFigure(int, int);
 		int getNbFigure();
 		bool validerFigure(int);
 		int entrerNumFigure();

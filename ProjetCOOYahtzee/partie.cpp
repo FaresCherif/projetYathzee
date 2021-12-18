@@ -37,7 +37,7 @@ namespace COO {
 		}
 	}
 
-	void partie::jouer(sf::RenderWindow* window, Diff difficulte,bool ecran) {
+	void partie::jouer(sf::RenderWindow* window, int difficulte,bool ecran) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
 		}
@@ -46,18 +46,9 @@ namespace COO {
 			int nbJoueur = 1;
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
-				if (difficulte == Diff::facile) {
-					f->jouer(window, joueur::Diff::facile,ecran);
-				}
-				else if (difficulte == Diff::moyen) {
-					f->jouer(window, joueur::Diff::moyen,ecran);
-				}
-				else if (difficulte == Diff::difficile) {
-					f->jouer(window, joueur::Diff::difficile,ecran);
-				}
-				else if (difficulte == Diff::hardcore) {
-					f->jouer(window, joueur::Diff::hardcore,ecran);
-				}
+				
+				f->jouer(window, difficulte,ecran);
+
 				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 				nbJoueur++;
@@ -89,18 +80,9 @@ namespace COO {
 			for (joueur* f : joueurs) {
 				std::cout << f->getNbFigure() << " " << f->getFigure().size();
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
-				if (difficulte == Diff::facile) {
-					f->jouer(window, joueur::Diff::facile,ecran);
-				}
-				else if (difficulte == Diff::moyen) {
-					f->jouer(window, joueur::Diff::moyen,ecran);
-				}
-				else if (difficulte == Diff::difficile) {
-					f->jouer(window, joueur::Diff::difficile,ecran);
-				}
-				else if (difficulte == Diff::hardcore) {
-					f->jouer(window, joueur::Diff::hardcore,ecran);
-				}
+
+				f->jouer(window, difficulte,ecran);
+				
 				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
 			}

@@ -221,7 +221,7 @@ namespace COO {
 						for (int i = 0; i < this->getNbFigure(); i++) {
 							if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) && !this->figureActuel.at(i)->vu) {
 								std::cout << "bouton clicke"<<std::endl;
-								this->choisirFigure(i,joueur::Diff::facile);
+								this->choisirFigure(i,1);
 								std::cout << "figure choisis" << std::endl;
 								this->lancerJoueur.aucunGarder();
 								std::cout << "de lache" << std::endl;
@@ -524,7 +524,7 @@ namespace COO {
 		}
 	}
 
-	void joueur::jouer(sf::RenderWindow* window, Diff difficulte,bool ecran) {
+	void joueur::jouer(sf::RenderWindow* window, int difficulte,bool ecran) {
 
 		int choix = 0;
 		choixDeRandom cdr;
@@ -539,7 +539,7 @@ namespace COO {
 			}
 			else {
 				this->choisirDeJoueur(window);
-				if (difficulte == Diff::hardcore)
+				if (difficulte == 4)
 				{
 					choix = iaRandom();
 				}
@@ -567,14 +567,14 @@ namespace COO {
 
 	}
 
-	void joueur::choisirFigure(int numChoixFigure, Diff difficulte) {
+	void joueur::choisirFigure(int numChoixFigure, int difficulte) {
 
 		bool choixValide = false;
 
 		while (!choixValide) {
 			switch (difficulte) {
 
-			case Diff::facile:
+			case 1:
 				if (numChoixFigure >= 0 && numChoixFigure < *nbFigure) {
 					choixValide = this->validerFigure(numChoixFigure);
 				}
@@ -582,7 +582,7 @@ namespace COO {
 					std::cout << "ERREUR numero non reconnu" << std::endl;
 				}
 				break;
-			case Diff::moyen:
+			case 2:
 				if (numChoixFigure >= 0 && numChoixFigure < (int)*nbFigure / 2) {
 					if (numChoixFigure < (int)*nbFigure / 2)
 					{
@@ -605,7 +605,7 @@ namespace COO {
 
 				}
 				break;
-			case Diff::difficile:
+			case 3:
 				if (numChoixFigure >= 0 && numChoixFigure < *nbFigure)
 				{
 					if (numChoixFigure == 0)
@@ -624,7 +624,7 @@ namespace COO {
 					}
 				}
 				break;
-			case Diff::hardcore:
+			case 4:
 				if (this->figureActuel[numChoixFigure]->vu == false) {
 					choixValide = this->validerFigure(numChoixFigure);
 					choixValide = true;
