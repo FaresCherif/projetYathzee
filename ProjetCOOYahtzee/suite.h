@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #pragma once
 namespace COO {
 	template<int T>
@@ -8,7 +10,7 @@ namespace COO {
 
 			int tab[6] = { 0,0,0,0,0,0 };
 
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 5; i++) { //compte le nombre de fois qu'il y a chaque face
 				tab[des[i].getValeur() - 1]++;
 			}
 
@@ -23,14 +25,13 @@ namespace COO {
 				if (tab[i] == 0) {
 					suite = 0;
 				}
-				else {
+				else { //calcul la plus longue suite de face
 					suite++;
 				}
 				i++;
 			}
 
-			//std::cout << "carre de " << T << " rapporte ";
-			if (suite >= T) {
+			if (suite >= T) {//selon la longueur de la suite
 				if (T == 4) {
 					return 30;
 				}
@@ -39,7 +40,6 @@ namespace COO {
 				}
 			}
 			else {
-				//std::cout << "0 points" << std::endl;
 				return 0;
 			}
 		}

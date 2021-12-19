@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #pragma once
 
 #include "visibiliteFigure.h"
@@ -10,7 +12,7 @@ namespace COO {
 	protected:
 		typeJoueur type;
 	public:
-		virtual int choixDe(std::vector<visibiliteFigure*>,de*) = 0;
+		virtual int choixDe(std::vector<visibiliteFigure*>,de*,int) = 0;
 		virtual typeJoueur getType() const = 0;
 	};
 }

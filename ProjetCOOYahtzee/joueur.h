@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #pragma once
 #include "lancer.h"
 #include "figure.h"
@@ -30,7 +32,7 @@ namespace COO {
 		void afficherValeur();
 		void afficherChoixIa(int i);
 		void afficherChoixFigure();
-		void choisirDeJoueur(sf::RenderWindow*);
+		void choisirDeJoueur();
 		void jouer(sf::RenderWindow*,bool);
 		void choisirFigure(int);
 		bool validerFigure(int);
@@ -47,6 +49,7 @@ namespace COO {
 		void afficherWindow(sf::RenderWindow*, int);
 		int iaRandom();
 		void randomiserOrdreFigure();
+		bool figureSuperieurFini();
 
 
 

@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #include "joueur.h"
 #include "nombre.h"
 #include "full.h"
@@ -23,12 +25,12 @@ namespace COO {
 		//instancie les differentes attribut a une valeur par defaut
 		this->SAVEFILE = "";
 		this->nbRelance = 0;
-		this->point = 0; // instancie le nombre de points a 0
+		this->point = 0; 
 		this->nbFigure = 0;
 		this->nbDe = 0;
 		this->nom = n;
 
-		switch (ia) //
+		switch (ia) //set le type de joueur
 		{
 		case typeJoueur::humain:
 			this->typeJ = new choixDeHumain;
@@ -44,109 +46,96 @@ namespace COO {
 			break;
 		}
 
-
-		//ajout de toutes les possibilites dans figure actuel
 	}
 
-	int joueur::getScore() {
+	int joueur::getScore() { //retourne le score actuel du joueur
 		return this->point;
 	}
 
-	void joueur::lancerDe()
+	void joueur::lancerDe() //lance les de
 	{
 		de* d = this->lancerJoueur.lancerDe();
-		for (visibiliteFigure* vf : this->figureActuel)
+		for (visibiliteFigure* vf : this->figureActuel) 
 		{
-			if (vf->vu == false) {
-				vf->valeur = 0;
+			if (vf->vu == false) { //si la figure n'a pas encore ete vu
 				int val = vf->figureC->valFigure(d);
-				vf->valeur = val;
+				vf->valeur = val; //la valeur de la figure correspond au de
 			}
 		}
 		std::cout << std::endl;
 	}
 
-	void joueur::afficherValeur() {
-		if (difficulte == 1) {
-			for (int i = 0; i < this->getNbFigure(); i++) {
+	void joueur::afficherValeur() { //affiche les points que donneraient chaque figure
+		if (difficulte == 1) {//pour la difficulte 1
+			for (int i = 0; i < this->getNbFigure(); i++) { 
 				if (this->figureActuel[i]->vu == false) {
 					std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
 				}
 			}
 		}
-		else if (difficulte == 2) {
-			if (this->figureActuel[0]->getFigureVu() == true &&
-				this->figureActuel[1]->getFigureVu() == true &&
-				this->figureActuel[2]->getFigureVu() == true &&
-				this->figureActuel[3]->getFigureVu() == true &&
-				this->figureActuel[4]->getFigureVu() == true &&
-				this->figureActuel[5]->getFigureVu() == true) {
+		else if (difficulte == 2) { //pour la difficulte 2
+			if (figureSuperieurFini()) { //si toute la partie superieure a ete vue
 
-				for (int i = 6; i < this->getNbFigure(); i++) {
+				for (int i = 6; i < this->getNbFigure(); i++) { //affiche la partie inferieur non vue
 					if (this->figureActuel[i]->vu == false) {
 						std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
 					}
 				}
 			}
 			else {
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 6; i++) { //affiche la partie superieure non vu
 					if (this->figureActuel[i]->vu == false) {
 						std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
 					}
 				}
 			}
 		}
-		else if (difficulte == 3 || difficulte==4) {
+		else if (difficulte == 3 || difficulte==4) { //pour la difficulte 3 ou 4
 			int i = 0;
 			while (this->figureActuel[i]->vu==true)
 			{
 				i++;
 			}
-			std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl;
+			std::cout << this->figureActuel[i]->nomFigure << " " << this->figureActuel[i]->valeur << std::endl; //affiche la premiere figure non vu
 		}
 
 	}
 
-	void joueur::afficherChoixIa(int i) {
+	void joueur::afficherChoixIa(int i) { //affiche la figure choisis par l'ia
 		std::cout << "L'IA a choisis " << this->figureActuel[i]->nomFigure << std::endl;
 		std::cout << std::endl;
 	}
 
-	void joueur::afficherChoixFigure() {
+	void joueur::afficherChoixFigure() { //affiche les choix de figures possible
 		
 		std::cout << "Que voulez-vous prende ?" << std::endl << std::endl;
-		if (this->difficulte == 1) {
-			for (int i = 0; i < this->getNbFigure(); i++) {
+		if (this->difficulte == 1) { //si la difficulte est de 1
+			for (int i = 0; i < this->getNbFigure(); i++) { // affiche toutes les figures non vu
 				if (this->figureActuel[i]->vu == false) {
 					std::cout << "Entrez " << i + 1 << " pour " << this->figureActuel[i]->nomFigure << std::endl;
 				}
 
 			}
 		}
-		else if (difficulte == 2) {
-			if (this->figureActuel[0]->getFigureVu() == true &&
-				this->figureActuel[1]->getFigureVu() == true &&
-				this->figureActuel[2]->getFigureVu() == true &&
-				this->figureActuel[3]->getFigureVu() == true &&
-				this->figureActuel[4]->getFigureVu() == true &&
-				this->figureActuel[5]->getFigureVu() == true) {
-				for (int i = 6; i < this->getNbFigure(); i++) {
+		else if (difficulte == 2) {//si la difficulte est de 2
+			if (figureSuperieurFini()) { //si toute les figures du superieure ont ete faites
+				for (int i = 6; i < this->getNbFigure(); i++) { // affiche les figures de l'inferieur non vu
 					if (this->figureActuel[i]->vu == false) {
 						std::cout << "Entrez " << i + 1 << " pour " << this->figureActuel[i]->nomFigure << std::endl;
 					}
 				}
 			}
 			else {
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 6; i++) { //affiche les figures du superieur non vu
 					if (this->figureActuel[i]->vu == false) {
 						std::cout << "Entrez " << i + 1 << " pour " << this->figureActuel[i]->nomFigure << std::endl;
 					}
 				}
 			}
 		}
-		else if (this->difficulte == 3 || difficulte==4) {
+		else if (this->difficulte == 3 || difficulte==4) {//si la difficulte est de 3 ou 4
 			int i = 0;
-			while (this->figureActuel[i]->vu == true) {
+			while (this->figureActuel[i]->vu == true) { //affiche la premiere figure non vu
 				i++;
 			}
 			std::cout << "Entrez " << i + 1 << " pour " << this->figureActuel[i]->nomFigure << std::endl;
@@ -154,14 +143,14 @@ namespace COO {
 		std::cout << std::endl;
 	}
 
-	bool joueur::isIA() {
+	bool joueur::isIA() { //retourne si le joueur est un ia
 		return !(this->typeJ->getType() == typeJoueur::humain);
 	}
 
 
-	void joueur::afficherWindow(sf::RenderWindow* window, int relance) {
+	void joueur::afficherWindow(sf::RenderWindow* window, int relance) { // fait l'affichage visuel
 
-		lancerDe();
+		lancerDe(); 
 
 		sf::Texture backgroundTexture;
 		std::vector < sf::Texture*> deTexture;
@@ -169,7 +158,7 @@ namespace COO {
 		std::vector <Button*> listeBouttonFigure;
 
 		sf::Text text;
-		text.setString(this->nom+ " : "+ std::to_string(this->getScore()));
+		text.setString(this->nom+ " : "+ std::to_string(this->getScore())); //met le nom du joueur avec son score
 
 		sf::Font font;
 		font.loadFromFile("font/arial.ttf");
@@ -185,13 +174,13 @@ namespace COO {
 			nomBoutton.append(vf->nomFigure);
 			nomBoutton.append(" ");
 			nomBoutton.append(std::to_string(vf->valeur));
-			if (vf->vu) {
+			if (vf->vu) { //change la couleur selon si le bouton est vu ou pas
 				listeBouttonFigure.push_back(new Button(positionXBoutton, positionYButton, 250, 50, nomBoutton, sf::Color::Blue));
 			}
 			else {
 				listeBouttonFigure.push_back(new Button(positionXBoutton, positionYButton, 250, 50, nomBoutton, sf::Color::Black));
 			}
-			positionYButton += 50;
+			positionYButton += 50; // decalage entre les boutons
 		}
 
 		Button relancerDe((float)window->getSize().x / 2 - 200 / 2, (float)window->getSize().y / 2 - 50 / 2, 200, 50, "Relancer De", sf::Color::Black); // place le boutton relance vers le milieu
@@ -209,9 +198,7 @@ namespace COO {
 			s += valDe;
 			s += ".png";
 			deTexture.at(i)->loadFromFile(s);
-
 		}
-
 
 
 		sf::Sprite backgroundSprite(backgroundTexture);
@@ -233,7 +220,6 @@ namespace COO {
 		}
 
 
-
 		float width = (float)window->getSize().x / backgroundTexture.getSize().x;
 		float height = (float)window->getSize().y / backgroundTexture.getSize().y;
 
@@ -245,54 +231,37 @@ namespace COO {
 		}
 
 
-
-
-
-
-
-
-
 		if (this->difficulte == 1) {
 			for (int i = 0; i < this->getNbFigure(); i++) {  //affiche les bouttons des figures
 				listeBouttonFigure.at(i)->render(window);
 			}
 		}
 		else if (difficulte == 2) {
-			if (this->figureActuel[0]->getFigureVu() == true &&
-				this->figureActuel[1]->getFigureVu() == true &&
-				this->figureActuel[2]->getFigureVu() == true &&
-				this->figureActuel[3]->getFigureVu() == true &&
-				this->figureActuel[4]->getFigureVu() == true &&
-				this->figureActuel[5]->getFigureVu() == true) {
-				for (int i = 0; i < this->getNbFigure(); i++) {
+			if (figureSuperieurFini()) { //si toutes les figures superieurs sont vu
+				for (int i = 0; i < this->getNbFigure(); i++) { //affiche toutes les figures
 					listeBouttonFigure.at(i)->render(window);	
 				}
 			}
 			else {
-				for (int i = 0; i < 6; i++) {
+				for (int i = 0; i < 6; i++) { //affiche les figures superieurs
 					listeBouttonFigure.at(i)->render(window);	
 				}
 			}
 		}
 		else if (this->difficulte == 3 || difficulte == 4) {
 			int i = 0;
-			while (this->figureActuel[i]->vu == true) {
+			while (this->figureActuel[i]->vu == true) { //affiche les figures vu
 				listeBouttonFigure.at(i)->render(window);
 				i++;
 			}
-			listeBouttonFigure.at(i)->render(window);
+			listeBouttonFigure.at(i)->render(window); //affiche la premiere figure non vu
 		}
 
 
-
-
-
-
-
-		if (relance < this->getNbRelance()) {
-			relancerDe.render(window);
+		if (relance < this->getNbRelance()) { //si le de peut etre relance
+			relancerDe.render(window); //affiche le boutton de relance du de
 		}
-		window->draw(text);
+		window->draw(text);//affiche le joueur avec son score
 
 		bool figureChoisis = false;
 
@@ -304,21 +273,21 @@ namespace COO {
 				if (event.type == sf::Event::Closed) {
 					window->close();
 				}
-				else if (event.type == sf::Event::MouseButtonPressed) {
-					if (relancerDe.clicked(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) && relance < this->getNbRelance()) {
+				else if (event.type == sf::Event::MouseButtonPressed) { 
+					if (relancerDe.clicked(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) && relance < this->getNbRelance()) { //si le boutton de relance de est clicke relance les des
 						std::cout << "relance" << std::endl;
 						afficherWindow(window, relance + 1);
 						figureChoisis = true;
 
 					}
 					else {
-						for (int i = 0; i < this->getNbDe(); i++) {
-							if ( deSprite.at(i)->getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>( sf::Mouse::getPosition(*window).y))) {
-								if (!this->lancerJoueur.isGarder(i)) {
-									this->lancerJoueur.garder(i);
+						for (int i = 0; i < this->getNbDe(); i++) { 
+							if ( deSprite.at(i)->getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>( sf::Mouse::getPosition(*window).y))) { //si un de est clicke
+								if (!this->lancerJoueur.isGarder(i)) { //si le de n'etait pas a garder
+									this->lancerJoueur.garder(i); //le passe a garder
 								}
 								else {
-									this->lancerJoueur.lacher(i);
+									this->lancerJoueur.lacher(i); //le repasse a non garder
 								}
 							}
 						}
@@ -326,24 +295,18 @@ namespace COO {
 						for (int i = 0; i < this->getNbFigure(); i++) {
 							if (!this->figureActuel.at(i)->vu) {
 								if (difficulte == 1) {
-									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) {
-										this->choisirFigure(i);
-										this->lancerJoueur.aucunGarder();
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) { //si une figure est clicke
+										this->choisirFigure(i); //la choisis
+										this->lancerJoueur.aucunGarder(); //repasse tous les des a lache
 										figureChoisis = true;
 									}
 								}
 
 								else if (difficulte == 2) {
-									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) {
-										if (i > 5) {
-											if (this->figureActuel[0]->getFigureVu() == true &&
-												this->figureActuel[1]->getFigureVu() == true &&
-												this->figureActuel[2]->getFigureVu() == true &&
-												this->figureActuel[3]->getFigureVu() == true &&
-												this->figureActuel[4]->getFigureVu() == true &&
-												this->figureActuel[5]->getFigureVu() == true) {
-
-												this->choisirFigure(i);
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y))) {// si une figure est clicke
+										if (i > 5) { // c'est une figure inferieure
+											if (figureSuperieurFini()){   //les figures superieurs ont toutes ete faite
+												this->choisirFigure(i); //la figure est choisis
 												this->lancerJoueur.aucunGarder();
 												figureChoisis = true;
 											}
@@ -357,12 +320,12 @@ namespace COO {
 								}
 								else if (this->difficulte == 3 || difficulte == 4) {
 									int i = 0;
-									while (this->figureActuel[i]->vu == true) {
+									while (this->figureActuel[i]->vu == true) { //affiche touts les boutons des figuers deja selectionne
 										listeBouttonFigure.at(i)->render(window);
 										i++;
 									}
-									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) ){
-										this->choisirFigure(i);
+									if (listeBouttonFigure.at(i)->getRectangle().getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(*window).x), static_cast<float>(sf::Mouse::getPosition(*window).y)) ){ //si le bouttons selectione est celui de la premiere figure non vu
+										this->choisirFigure(i);//la selectionne
 										this->lancerJoueur.aucunGarder();
 										figureChoisis = true;
 									}
@@ -377,7 +340,7 @@ namespace COO {
 
 	}
 
-	void joueur::choisirDeJoueur(sf::RenderWindow* window) {
+	void joueur::choisirDeJoueur() { // le joueur choisis quoi faire de ses des
 		std::cout << "La difficulte est de " << this->difficulte << std::endl;
 
 		if (this->pointPrime > 0) {
@@ -394,11 +357,11 @@ namespace COO {
 		lancerDe();
 		afficherValeur();
 
-		while (compteurLance < this->getNbRelance() && relancerDe) {
+		while (compteurLance < this->getNbRelance() && relancerDe) { //tant que l'utilisateur veut relancer et qu'il peut encore relancer
 
 			std::cout << "relancer (O/N) " << compteurLance << "/" << this->getNbRelance() << std::endl;
 
-			if (!lancerJoueur.isTousGarder()) {
+			if (!lancerJoueur.isTousGarder()) { //affiche les des non gardes
 				std::cout << "garder les des ";
 				for (int i = 0; i < this->getNbDe(); i++) {
 					if (!lancerJoueur.isGarder(i)) {
@@ -408,7 +371,7 @@ namespace COO {
 				std::cout << "en appuyant sur le nombre correspondant " << std::endl;
 			}
 
-			if (!lancerJoueur.isAucunGarder()) {
+			if (!lancerJoueur.isAucunGarder()) { //affiche les des gardes
 				std::cout << "ne plus garder les des ";
 				for (int i = 0; i < this->getNbDe(); i++) {
 					if (lancerJoueur.isGarder(i)) {
@@ -421,10 +384,10 @@ namespace COO {
 			std::string reponse;
 			std::cin >> reponse;
 
-			if (reponse == "N") {
+			if (reponse == "N") { //si l'entre correspond a ne plus relancer
 				relancerDe = false;
 			}
-			else if (reponse == "1" || reponse == "2" || reponse == "3" || reponse == "4" || reponse == "5") {
+			else if (reponse == "1" || reponse == "2" || reponse == "3" || reponse == "4" || reponse == "5") { //si l'entre correspond a garde un de
 
 				if (!this->lancerJoueur.isGarder(stoi(reponse) - 1)) {
 					this->lancerJoueur.garder(stoi(reponse) - 1);
@@ -433,7 +396,7 @@ namespace COO {
 					this->lancerJoueur.lacher(stoi(reponse) - 1);
 				}
 			}
-			else if (reponse == "O") {
+			else if (reponse == "O") { //si l'entre correspond a relancer
 
 				lancerDe();
 				afficherValeur();
@@ -450,12 +413,12 @@ namespace COO {
 
 
 
-	int joueur::entrerNumFigure() {
+	int joueur::entrerNumFigure() { //le joueur choisis le numero de la figure qu'il veut selectionner
 
 		bool numeroValide = false;
 		int numChoixFigue;
 
-		while (!numeroValide) {
+		while (!numeroValide) { //tant que l'entre n'est pas valide
 			afficherChoixFigure();
 
 			std::string choixFigure;
@@ -463,7 +426,7 @@ namespace COO {
 
 
 			try {
-				numChoixFigue = (stoi(choixFigure) - 1);
+				numChoixFigue = (stoi(choixFigure) - 1);//essaye de convertir l'entre en nombre. Si cela echoue affiche une erreur et redemande une entree
 				numeroValide = true;
 			}
 			catch (...) {
@@ -471,11 +434,11 @@ namespace COO {
 			}
 		}
 
-		return numChoixFigue;
+		return numChoixFigue; //retourne le numero entre
 	}
 
 	void joueur::setPartieJoueur(const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE)
-	{
+	{ //donne au joueur les eleent de la partie
 		this->nbDe = nbD;
 		this->nbFigure = nbFig;
 		this->nbRelance = nbReroll;
@@ -498,7 +461,7 @@ namespace COO {
 		return *(this->nbRelance);
 	}
 
-	bool joueur::validerFigure(int i) {
+	bool joueur::validerFigure(int i) {//regarde si la figure a deja ete choisis
 		if (this->figureActuel[i]->vu == false) {
 			this->point += this->figureActuel[i]->valeur;
 			this->figureActuel[i]->vu = true;
@@ -511,7 +474,7 @@ namespace COO {
 					std::cout << "---------------------------------------------------------PRIME----------------------------------------" << std::endl;
 				}
 			}
-			if (this->typeJ->getType() != typeJoueur::humain) {
+			if (this->isIA()) {  //affiche le choix fait si c'est une IA
 				this->afficherChoixIa(i);
 			}
 
@@ -523,12 +486,13 @@ namespace COO {
 		}
 		return false;
 	}
-	void joueur::sauvegarderJoueur()
+
+	void joueur::sauvegarderJoueur() //sauvegarde les differente info du joueur dans un fichier
 	{
 		std::ofstream myfile;
-		myfile.open(this->SAVEFILE, std::ios_base::app);
+		myfile.open(this->SAVEFILE, std::ios_base::app); // ajoute les info sans effacer les info deja presente dans le fichier
 
-		if (this->typeJ->getType() == typeJoueur::iaMax) {
+		if (this->typeJ->getType() == typeJoueur::iaMax) { //ajoute le type de joueur dont il s'agit
 			myfile << 0 << std::endl;
 		}
 		else if (this->typeJ->getType() == typeJoueur::iaRandom) {
@@ -542,14 +506,14 @@ namespace COO {
 		myfile << this->nom << std::endl;
 		myfile << this->difficulte<< std::endl;
 
-		for (int i = 0; i < this->getNbFigure(); i++) {
+		for (int i = 0; i < this->getNbFigure(); i++) { //ajoute les figure
 			myfile << this->figureActuel[i]->vu << " " << this->figureActuel[i]->valeur << " " << i << std::endl;
 		}
 		myfile << std::endl;
 		myfile.close();
 	}
 
-	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string nom,int difficulte) {
+	joueur* joueur::charger(int pt, int ptPrime, const int* nbD, const int* nbReroll, const int* nbFig, std::vector<visibiliteFigure*> visibFig, const char* SAVE,std::string nom,int difficulte) { //charge les info des joueurs selon les infos en entre
 		this->point = pt;
 		this->nom = nom;
 		this->pointPrime = ptPrime;
@@ -559,23 +523,23 @@ namespace COO {
 	}
 
 
-	strategyDe* joueur::getTypeJ()
+	strategyDe* joueur::getTypeJ() //retourn le type de joueur
 	{
 		return this->typeJ;
 	}
 
-	std::vector<visibiliteFigure*> joueur::getFigure() {
+	std::vector<visibiliteFigure*> joueur::getFigure() { //retourne le vecteur des visibiliteFigure
 		return this->figureActuel;
 	}
 
-	joueur::~joueur() {
+	joueur::~joueur() { //destructeur de joueur
 		delete this->typeJ;
 		for (int i = 0; i < this->figureActuel.size(); i++) {
 			delete this->figureActuel.at(i);
 		}
 	}
 
-	joueur& joueur::operator=(const joueur& j) {
+	joueur& joueur::operator=(const joueur& j) { //operateur d'affectation
 		if (this != &j) {
 			for (int i = 0; i < this->figureActuel.size(); ++i) {
 				if (this->figureActuel.at(i) != nullptr) {
@@ -591,6 +555,7 @@ namespace COO {
 				this->lancerJoueur = j.lancerJoueur;
 				this->SAVEFILE = j.SAVEFILE;
 				this->pointPrime = j.pointPrime;
+				this->nom = j.nom;
 				for (int i = 0; i < j.figureActuel.size(); ++i) {
 					if (j.figureActuel.at(i) != nullptr)
 						this->figureActuel.at(i) = new visibiliteFigure(*(j.figureActuel.at(i))); // copie en profondeur
@@ -621,7 +586,7 @@ namespace COO {
 		return *this;
 	}
 
-	joueur::joueur(const joueur& j) {
+	joueur::joueur(const joueur& j) { //constructeur par recopie
 		if (j.nbDe != nullptr) {				// si la partie a ete initialise
 			this->nbDe = j.nbDe;
 			this->nbRelance = j.nbRelance;
@@ -629,6 +594,8 @@ namespace COO {
 			this->lancerJoueur = j.lancerJoueur;
 			this->SAVEFILE = j.SAVEFILE;
 			this->pointPrime = j.pointPrime;
+			this->difficulte = j.difficulte;
+			this->nom = j.nom;
 			for (int i = 0; i < j.figureActuel.size(); ++i) {
 				if (j.figureActuel.at(i) != nullptr)
 					this->figureActuel.at(i) = new visibiliteFigure(*(j.figureActuel.at(i))); // copie en profondeur
@@ -636,12 +603,7 @@ namespace COO {
 					this->figureActuel.at(i) = nullptr;
 			}
 		}
-		else {
-			this->SAVEFILE = "";
-			this->nbRelance = 0;
-			this->nbFigure = 0;
-			this->nbDe = 0;
-		}
+
 		this->point = j.point;
 		std::cout << this->typeJ << std::endl;
 
@@ -662,7 +624,7 @@ namespace COO {
 
 
 	}
-	void joueur::setFigureNouvellePartie()
+	void joueur::setFigureNouvellePartie() //repasse toute les figures a non vu et a 0
 	{
 		for (visibiliteFigure* f : this->figureActuel) {
 			f->valeur = 0;
@@ -670,7 +632,7 @@ namespace COO {
 		}
 	}
 
-	void joueur::jouer(sf::RenderWindow* window,bool ecran) {
+	void joueur::jouer(sf::RenderWindow* window,bool ecran) { //un tour du joueur
 
 		int choix = 0;
 		choixDeRandom cdr;
@@ -678,24 +640,20 @@ namespace COO {
 		switch (this->typeJ->getType()) {
 		case typeJoueur::humain:
 			if (ecran) {
-				std::cout << "dans joueur avant" << std::endl;
-				this->afficherWindow(window,1);
-				std::cout << "dans joueur apres" << std::endl;
-
+				this->afficherWindow(window,1); //choisirFigure est directement appele depuis la fonction
 			}
 			else {
-				this->choisirDeJoueur(window);
-				choix = entrerNumFigure();
+				this->choisirDeJoueur(); //le joueur choisis ses des finaux
+				choix = entrerNumFigure(); //le joueur entre le numero de la figure qu'il veut conserver
 			}
-
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
+			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes(),this->difficulte); //l'ia random choisis sa figure
 			break;
 		case typeJoueur::iaMax:
 			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
+			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes(),this->difficulte); //l'ia max choisis sa figure
 			break;
 		}
 
@@ -705,40 +663,31 @@ namespace COO {
 
 	}
 
-	void joueur::choisirFigure(int numChoixFigure) {
+	void joueur::choisirFigure(int numChoixFigure) { //selon la figure choisis
 		
 		std::cout << "choix : "<< numChoixFigure<< " difficulte : "<<this->difficulte << std::endl;
 
 
 		bool choixValide = false;
 
-		while (!choixValide) {
+		while (!choixValide) { 
 			switch (this->difficulte) {
 
 			case 1:
-				if (numChoixFigure >= 0 && numChoixFigure < this->getNbFigure()) {
-					choixValide = this->validerFigure(numChoixFigure);
+				if (numChoixFigure >= 0 && numChoixFigure < this->getNbFigure()) { //si le numero est possible
+					choixValide = this->validerFigure(numChoixFigure); //le valide
 				}
 				else {
 					std::cout << "ERREUR numero non reconnu" << std::endl;
 				}
 				break;
 			case 2:
-				if (numChoixFigure >= 0 && numChoixFigure < (int)*nbFigure / 2) {
-					if (numChoixFigure < (int)*nbFigure / 2)
-					{
-						choixValide = this->validerFigure(numChoixFigure);
-					}
+				if (numChoixFigure >= 0 && numChoixFigure < 6) { //si le numero choisis est dans la partie superieur
+					choixValide = this->validerFigure(numChoixFigure);
 				}
-				else if (numChoixFigure >= (int)*nbFigure / 2 && numChoixFigure < *nbFigure)
+				else if (numChoixFigure >= 6 && numChoixFigure < this->getNbFigure())
 				{
-					if (
-						this->figureActuel[0]->getFigureVu() == true &&
-						this->figureActuel[1]->getFigureVu() == true &&
-						this->figureActuel[2]->getFigureVu() == true &&
-						this->figureActuel[3]->getFigureVu() == true &&
-						this->figureActuel[4]->getFigureVu() == true &&
-						this->figureActuel[5]->getFigureVu() == true) 
+					if (figureSuperieurFini())
 					{
 						choixValide = this->validerFigure(numChoixFigure);
 					}
@@ -752,14 +701,14 @@ namespace COO {
 			case 3:
 			case 4:
 
-				if (numChoixFigure >= 0 && numChoixFigure < this->getNbFigure())
+				if (numChoixFigure >= 0 && numChoixFigure < this->getNbFigure())// si le numero de la figure est valide
 				{
 					int i = 0;
 					while (this->figureActuel[i]->vu == true) {
 						i++;
 					}
 
-					if (numChoixFigure == i)
+					if (numChoixFigure == i) //est que le numero entre est bien le premier numero
 					{
 						choixValide = this->validerFigure(numChoixFigure);
 					}
@@ -780,44 +729,40 @@ namespace COO {
 				break;
 
 			}
-			if (!choixValide) {
+			if (!choixValide) { // si le choix n'est pas valide redemande un numero
 				numChoixFigure = entrerNumFigure();
 			}
 		}
 
 	}
 
-	int  joueur::iaRandom() {
-		int choix;
-		bool choixValide = false;
+	
 
-		while (!choixValide) {
-			int nbAleatoire;
-
-			std::random_device dev;
-			std::mt19937 rng(dev());
-			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 12); // distribution in range [1, 6]
-			nbAleatoire = dist6(rng);
-
-			if (this->figureActuel[nbAleatoire]->vu == false) {
-				choix = nbAleatoire;
-				choixValide = true;
-				std::cout << "Choix aleatoire numero : " << choix + 1 << std::endl;
-			}
-		}
-		return choix;
-	}
-
-	void joueur::setDifficulte(int diff) {
+	void joueur::setDifficulte(int diff) { //met la difficulte
 		this->difficulte = diff;
+		if (diff == 4) { //randomise l'ordre des figures
+			this->randomiserOrdreFigure();
+		}
 	}
 
-	void joueur::randomiserOrdreFigure()
+	void joueur::randomiserOrdreFigure()//randomise l'ordre des figures
 	{
 		std::random_device rd;
 
 		std::shuffle(this->figureActuel.begin(), this->figureActuel.end(),rd);
 
+	}
+
+	bool joueur::figureSuperieurFini() { //retourne si toutes les figures superieurs ont ete vus
+		if (this->figureActuel[0]->getFigureVu() == true &&
+			this->figureActuel[1]->getFigureVu() == true &&
+			this->figureActuel[2]->getFigureVu() == true &&
+			this->figureActuel[3]->getFigureVu() == true &&
+			this->figureActuel[4]->getFigureVu() == true &&
+			this->figureActuel[5]->getFigureVu() == true) {
+			return true;
+		}
+		return false;
 	}
 
 }

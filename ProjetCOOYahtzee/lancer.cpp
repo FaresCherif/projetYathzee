@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #include "lancer.h"
 
 namespace COO {
