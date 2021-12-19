@@ -5,7 +5,5 @@ namespace COO {
 	class chance : public figure {
 	public:
 		int valFigure(de*);
-		int getValeur();
-
 	};
 }

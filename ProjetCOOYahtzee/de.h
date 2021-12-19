@@ -1,4 +1,6 @@
+//Fares Cherif
 #pragma once
+#include "de.h"
 
 namespace COO {
 
@@ -17,5 +19,6 @@ namespace COO {
 		bool isGarder();
 		int getValeur();
 		bool operator==(const int);
+
 	};
 }

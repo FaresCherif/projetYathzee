@@ -14,16 +14,16 @@
 
 using namespace COO;
 int main() {
-	joueur j1(typeJoueur::humain,"harold");
+	//joueur j1(typeJoueur::humain,"harold");
 	//joueur j2(typeJoueur::iaMax,"lisa");
-	//joueur j3(typeJoueur::iaMax);
+	joueur j3(typeJoueur::iaRandom);
 
 	std::vector<joueur*> vecJoueurs;
 	std::vector<joueur*> vecVide;
 
-	vecJoueurs.push_back(&j1);
+	//vecJoueurs.push_back(&j1);
 	//vecJoueurs.push_back(&j2);
-	//vecJoueurs.push_back(&j3);
+	vecJoueurs.push_back(&j3);
 
 	//joueur j4(j3);
 	

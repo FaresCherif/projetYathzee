@@ -691,11 +691,11 @@ namespace COO {
 			break;
 		case typeJoueur::iaRandom:
 			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
+			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes(),this->difficulte);
 			break;
 		case typeJoueur::iaMax:
 			lancerDe();
-			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes());
+			choix = this->typeJ->choixDe(this->figureActuel, lancerJoueur.getDes(),this->difficulte);
 			break;
 		}
 
