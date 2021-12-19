@@ -1,0 +1,50 @@
+Fares Cherif
+# projetYathzee
+
+Etudiant ayant travaille sur le projet : Fares Cherif et Karmim Chakib
+
+Conception (Fares)
+	Realisation d'un diagramme de classe qui a ete modifie a plusieurs reprises pour plusieurs raison :
+		- mauvaise comprehension au debut de l'utilite des template
+		- ajout de nouvelles fonctionnalites comme les strategies
+
+	Ce diagramme de classe permettaient en theorie aux differents etudiants du projet de travailler en parralele avec une comprhension commune du projet 
+
+Jeu de base (Fares)
+	Realisation du devellopement du jeu de base dans le terminal
+	
+	Deroulement :
+		le main envoie a la partie un vecteur des joueurs de la partie
+		la partie fais jouer chaque joueurs leur tour autant de fois qu'il y a de figures
+		Pendant leur tour les joueurs choisissent de garder ou relancer leur de puis choissisent une figure ce qui leur rapporte des points. Celle-ci ne pourra plus etre choisis au prochain tours
+
+Difficulte (Fares et Chakib)
+	Ajout d'un system de difficulte au jeu de base
+
+	Difficulte :
+		1) jeu de base
+		2) l'utilisateur ne peut choisir les figures inferieurs qu'une fois que toutes les figures superieures ont ete choisis
+		3) l'utilisateur doit choisir les les figures dans l'ordre
+		4) pareil que la difficulte 3 sauf qu'en debut de partie l'ordre des figure a ete reorganiser aleatoirement
+
+Sauvegarde (Fares)
+
+	La sauvegarde enregistre comme information le numero de tour et les differentes informations des joueurs dans un fichier de sauvegarde.
+	Le chargement recupere ces informations recree les joueurs a partir de celle-ci et reprend la parti au tour ou elle s'etait arrete
+
+	La sauvegarde et le chargement ne peuvent se faire qu'au debut du tour du premier joueur. Elle sont fonctionnelle mais par manque de temps n'ont pas pu etre pleinement integre
+	au projet ( pas de boutton pour sauvegarder ou charger, ici sauvegarde automatique apres que les joueurs ai choisis 6 figures et chargement apres que la partie soit fini)
+
+IA (Fares)
+	Il existe 3 type d'IA
+		1) Les joueurs qui choisissent eux-meme leur figure
+		2)Les IAMax qui cherche la figure leur rapportant le plus de point
+		3)Les IARandom qui choisissent une figure au hasard
+		
+	Il a ensute fallu integree la difficulte aux IA
+
+Visuel (Fares)
+	SFML permet de faire l'affichage. 
+	Il y en a dans le main.cpp pour faire lecran de choix du debut.
+	Dans joueur.cpp pour faire l'affichage pendant le jeu.
+	Dans partie pour faire l ecran de fin

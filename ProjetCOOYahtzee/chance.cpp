@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #include "chance.h"
 #include <iostream>
 

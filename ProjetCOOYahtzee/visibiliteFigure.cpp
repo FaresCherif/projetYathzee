@@ -1,7 +1,9 @@
+//Fares Cherif
+
 #include "visibiliteFigure.h"
 
 namespace COO {
-	visibiliteFigure::visibiliteFigure(figure* f,std::string nom)
+	visibiliteFigure::visibiliteFigure(figure* f,std::string nom) //constructeur de visibiliteFigure basique
 	{
 		this->figureC = f;
 		this->valeur = 0;
@@ -9,14 +11,14 @@ namespace COO {
 		this->nomFigure = nom;
 	}
 
-	bool visibiliteFigure::getFigureVu() {
+	bool visibiliteFigure::getFigureVu() { //retourne si la figure a ete vu
 		return this->vu;
 	}
 
-	int visibiliteFigure::valeurFigure() {
+	int visibiliteFigure::valeurFigure() { //retourn la valeur de la figure
 		return this->valeur;
 	}
-	visibiliteFigure::visibiliteFigure(visibiliteFigure const& vF)
+	visibiliteFigure::visibiliteFigure(visibiliteFigure const& vF) //constructeur par recopie de visibiliteFigure
 	{
 		this->figureC = vF.figureC;
 		this->nomFigure = vF.nomFigure;
@@ -24,7 +26,7 @@ namespace COO {
 		this->vu = vF.vu;
 	}
 
-	visibiliteFigure::visibiliteFigure(bool v,int val,std::string nom,figure* fig ) {
+	visibiliteFigure::visibiliteFigure(bool v,int val,std::string nom,figure* fig ) { //constructeur de visibiliteFigure avec la vu et valeur
 		this->vu = v;
 		this->valeur = val;
 		this->nomFigure = nom;

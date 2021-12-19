@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #pragma once
 #include "figure.h"
 #include <iostream>
@@ -9,14 +11,13 @@ namespace COO {
 	public:
 		int valFigure(de* des) {
 			int cpt = 0;
-			for (int i = 0; i < 5; i++) {
-				if (des[i] == T) {
+			for (int i = 0; i < 5; i++) {//pour chaque de
+				if (des[i] == T) { //compte le nombre de fois que la face de cette valeur est visible
 					cpt++;
 				}
 			}
 
-			//std::cout << "Les " << T << " rapportent "<<T*cpt<<" points" << std::endl;
-			return T*cpt;
+			return T*cpt;//retourne le nombre de fois qu'il y a une face  fois ca valeur
 		}
 
 	};

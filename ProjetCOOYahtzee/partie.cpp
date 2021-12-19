@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #include "partie.h"
 #include <vector>
 #include <iostream>
@@ -12,11 +14,11 @@
 
 
 namespace COO {
-	partie::partie(std::vector<joueur*> vecJoueur)
+	partie::partie(std::vector<joueur*> vecJoueur) //constructeur de partie
 	{
-		this->joueurs = vecJoueur;
+		this->joueurs = vecJoueur; //donne le vecteur de joueur comme ses joueurs
 
-
+		//ajoute les differentes figure
 		this->figureJoueur.push_back(new visibiliteFigure(new nombre<1>, "un"));
 		this->figureJoueur.push_back(new visibiliteFigure(new nombre<2>, "deux"));
 		this->figureJoueur.push_back(new visibiliteFigure(new nombre<3>, "trois"));
@@ -31,7 +33,7 @@ namespace COO {
 		this->figureJoueur.push_back(new visibiliteFigure(new multiple<5>, "yahtzee"));
 		this->figureJoueur.push_back(new visibiliteFigure(new chance, "chance"));
 
-
+		//cree la partie avec chacun des joueurs
 		for (joueur* j : this->joueurs) {
 			j->setPartieJoueur(&this->nbDe, &this->nbRelance, &this->nbFigure, figureJoueur, SAVE);
 		}
@@ -40,29 +42,25 @@ namespace COO {
 	void partie::jouer(sf::RenderWindow* window, int difficulte,bool ecran) {
 		for (joueur* j : this->joueurs) { //initialise toutes les figures des joueurs a 0 et non vu
 			j->setFigureNouvellePartie();
-			j->setDifficulte(difficulte);
+			j->setDifficulte(difficulte);//donne la difficulte
 
-			if (difficulte == 4) {
-				j->randomiserOrdreFigure();
-			}
+
 		}
 
-		for (int i = 0; i < this->nbFigure; i++) {
-			int nbJoueur = 1;
-			for (joueur* f : joueurs) {
+		for (int i = 0; i < this->nbFigure; i++) { //autant de tour qu'il y a de figure
+			for (joueur* f : joueurs) { //pour chaqu'un des joueurs
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
 				
-				f->jouer(window,ecran);
+				f->jouer(window,ecran);//le joueur joue un tour
 
 				std::cout << "Le joueur " << f->nom << " fini a " << f->getScore() << " points" << std::endl << std::endl << std::endl;
 
-				nbJoueur++;
 			}
 
 			if (i == 5) {
 				std::cout << "-----------Sauvegarde--------------\t\t" << std::endl;
 
-				this->sauvegarder(i + 1);
+				this->sauvegarder(i + 1);//sauvegarde la partie ( par manque de temps la sauvegarde n'a pas pu etre pleinement integre à l'application et se fait au tour 5)
 			}
 		}
 
@@ -71,16 +69,15 @@ namespace COO {
 		
 		
 
-		for (joueur* f : joueurs) {
-			std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points " << std::endl;
-		}
-		/*
-		int i = this->charger();
+		//chargement de la partie ( par manque de temps le chargement n'a pas pu etre pleinement integre a l'application et se fait apres que la partie soit fini)
+
+		
+		int i = this->charger(); //charge la partie
 		
 		std::cout << "-----------Chargement--------------\t\t" << std::endl;
 
 		std::cout << "joueur : " << joueurs.size() << std::endl;;
-		for (i; i < this->nbFigure; i++) {
+		for (i; i < this->nbFigure; i++) { //reprend la partie
 
 			for (joueur* f : joueurs) {
 				std::cout << "Le joueur " << f->nom << " a " << f->getScore() << " points" << std::endl;
@@ -91,13 +88,15 @@ namespace COO {
 
 			}
 		}
-		*/
+		
+		
+		
 
 		if (ecran) {
-			this->ecranFinPartie(window);
+			this->ecranFinPartie(window); //affiche l'ecran de fin
 		}
 		else {
-			for (joueur* f : joueurs) {
+			for (joueur* f : joueurs) { //affiche le score final des joueurs
 				std::cout << "Le score final du joueur " << f->nom << " est de " << f->getScore() << std::endl;
 				window->close();
 			}
@@ -107,7 +106,7 @@ namespace COO {
 	{
 		std::ofstream myfile;
 		myfile.open(this->SAVE);
-		myfile << i << std::endl;
+		myfile << i << std::endl; //met le numero de tour
 
 		for (joueur* f : joueurs) {
 
@@ -118,7 +117,7 @@ namespace COO {
 	}
 	int partie::charger()
 	{
-		joueurs.clear();
+		joueurs.clear(); //supprime tout les joueurs de la liste de joueurs
 		std::ifstream fichier(this->SAVE);
 		int numTour=0;
 
@@ -138,10 +137,10 @@ namespace COO {
 			{
 				try {
 					std::cout << cpt << std::endl;
-					if (cpt == -1) {
+					if (cpt == -1) { // recupere le numero de tour
 						int numSave = (stoi(ligne));
 						numTour = numSave;
-					}
+					} //puis les info pour refaire les joueurs
 					else if (cpt % 18 == 0) {
 						int numSave = (stoi(ligne));
 						numIA = numSave;
@@ -161,8 +160,8 @@ namespace COO {
 						int numSave = (stoi(ligne));
 						difficulte = numSave;
 					}
-					else {
-
+					else { 
+						//recupere les infos des figures
 						std::istringstream iss(ligne);
 						std::vector<std::string> result;
 
@@ -183,7 +182,7 @@ namespace COO {
 
 				}
 
-				catch (...) {
+				catch (...) {//cree un joueur a partir de toutes ces infos
 					std::cout << cpt << std::endl;
 					joueur* j;
 					switch (numIA)
@@ -205,7 +204,7 @@ namespace COO {
 					}
 					*/
 					j->charger(pt, ptPrime, &(this->nbDe), &(this->nbRelance), &(this->nbFigure), figureJCharger, this->SAVE,nom,difficulte);
-					joueurs.push_back(j);
+					joueurs.push_back(j); //ajoute le joueur a la liste des joueurs de la partie
 					figureJCharger.clear();
 				}
 			}
@@ -218,7 +217,7 @@ namespace COO {
 		return numTour;
 	}
 
-	partie::~partie()
+	partie::~partie() //destructeur de partie
 	{
 
 		std::cout << "destructeur" << std::endl;
@@ -232,7 +231,7 @@ namespace COO {
 		//std::cout <<"partie detruite " << std::endl;
 	}
 
-	partie& partie::operator=(const partie& p)
+	partie& partie::operator=(const partie& p) //operateur d'affectation
 	{
 		if (this != &p) {
 			for (int i = 0; i < this->figureJoueur.size(); ++i) {
@@ -253,7 +252,7 @@ namespace COO {
 		return *this;
 	}
 
-	partie::partie(const partie& p)
+	partie::partie(const partie& p) //constructeur par recopie
 	{
 
 		this->joueurs = p.joueurs;
@@ -266,7 +265,7 @@ namespace COO {
 		}
 	}
 
-	void partie::ecranFinPartie(sf::RenderWindow* window)
+	void partie::ecranFinPartie(sf::RenderWindow* window) //affiche l'ecran de fin
 	{
 		std::cout << "boucle fini" << std::endl;
 
@@ -302,11 +301,11 @@ namespace COO {
 
 		window->draw(backgroundSprite);
 
-		for (sf::Text* t : listeTextFinalJoueur) {
+		for (sf::Text* t : listeTextFinalJoueur) { //pour chaqu'un des joueurs
 			t->setPosition(sf::Vector2f(positionXBoutton, positionYButton));
 			positionYButton += 50;
 			std::cout << t->getString().toAnsiString() << std::endl;
-			window->draw(*t);
+			window->draw(*t); //affiche le score final
 		}
 
 
@@ -314,6 +313,5 @@ namespace COO {
 	}
 
 
-	// just to backup
 
 }

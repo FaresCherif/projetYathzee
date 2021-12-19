@@ -1,3 +1,5 @@
+//Fares Cherif
+
 #include "choixDeHumain.h"
 
 namespace COO {
